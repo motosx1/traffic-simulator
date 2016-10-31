@@ -1,13 +1,23 @@
 package pl.zablocki.core.longitudinalmodel;
 
 
+import lombok.Getter;
+
 public class ParamsSingleton {
 
-    private double dt;
+    private static ParamsSingleton instance = null;
 
-    public ParamsSingleton() {
+    @Getter
+    private double dt = 0.2;
 
+    private ParamsSingleton() {
     }
 
+    public static ParamsSingleton getInstance() {
+        if (instance == null) {
+            instance = new ParamsSingleton();
+        }
+        return instance;
+    }
 
 }
