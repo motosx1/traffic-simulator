@@ -7,13 +7,10 @@ import java.util.Set;
 public class Simulation {
 
 	private Set<Vehicle> activeVehicles;
-	/**
-	 * init in constructor
-	 */
 	private Scenario scenario;
 
-	public Simulation(){
-
+	public Simulation(Scenario scenario){
+		this.scenario = scenario;
 	}
 
 

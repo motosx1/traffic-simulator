@@ -1,4 +1,4 @@
-package pl.zablocki.viewer;
+package pl.zablocki.viewer.structures;
 
 import pl.zablocki.core.vehicle.VehicleData;
 
