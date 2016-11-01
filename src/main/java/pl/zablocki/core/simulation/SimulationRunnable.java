@@ -7,9 +7,7 @@ import pl.zablocki.viewer.panels.CanvasPanel;
 import pl.zablocki.viewer.panels.MainFrame;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SimulationRunnable implements Runnable {
 
@@ -17,23 +15,24 @@ public class SimulationRunnable implements Runnable {
     private MainFrame mainFrame;
     private Simulation simulation;
     private List<VehicleDataListener> listeners = new ArrayList<VehicleDataListener>();
-    ParamsSingleton params;
+    private ParamsSingleton params = ParamsSingleton.getInstance();
+
 
     public SimulationRunnable(Scenario scenario) {
         this.scenario = scenario;
-        params = ParamsSingleton.getInstance();
         prepareSimulation();
     }
 
     public void run() {
         double dt = params.getDt();
 
-        double totalTime = 0;
+        double elapsedTime = 0;
 
-        while (totalTime < scenario.getSimulationDuration()){
-            //TODO tutaj cala logika
+        while (elapsedTime < scenario.getSimulationDuration()) {
+            List<Vehicle> vehicles = simulation.doStep(dt, elapsedTime);
+            notifyListeners(vehicles);
             sleep();
-            totalTime += dt;
+            elapsedTime += dt;
         }
 
     }
@@ -47,20 +46,19 @@ public class SimulationRunnable implements Runnable {
         return mainFrame.getCanvas();
     }
 
-    public void notifyListeners(Set<Vehicle> vehicles) {
-        //TODO przekazać aktualną liste z pojazdami ;)
+    private void notifyListeners(List<Vehicle> vehicles) {
         listeners.forEach(listener ->
-                listener.updateVehicles(new HashSet<Vehicle>())
+                listener.updateVehicles(vehicles)
         );
     }
 
     private void prepareSimulation() {
-        Simulation simulation = new Simulation(scenario);
+        this.simulation = new Simulation(scenario);
     }
 
     private void sleep() {
         try {
-            Thread.sleep(20);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             System.err.println(e);
         }

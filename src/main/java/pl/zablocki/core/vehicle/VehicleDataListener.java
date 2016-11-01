@@ -1,7 +1,7 @@
 package pl.zablocki.core.vehicle;
 
-import java.util.Set;
+import java.util.List;
 
 public interface VehicleDataListener {
-    public void updateVehicles(Set<Vehicle> vehicles);
+    public void updateVehicles(List<Vehicle> vehicles);
 }

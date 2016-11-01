@@ -3,11 +3,11 @@ package pl.zablocki.core.simulation;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
 
-import java.util.Set;
+import java.util.List;
 
 public class FileWriter implements VehicleDataListener {
 
-	public void updateVehicles(Set<Vehicle> vehicles) {
+	public void updateVehicles(List<Vehicle> vehicles) {
 
 	}
 }

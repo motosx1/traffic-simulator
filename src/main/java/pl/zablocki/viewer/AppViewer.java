@@ -30,7 +30,7 @@ public class AppViewer {
     private Scenario loadScenario() {
         //TODO init with xml
         VehicleData typicalVehicle = new VehicleData();
-        Scenario scenario = new Scenario(20, 10*60, typicalVehicle);
+        Scenario scenario = new Scenario(4000, 10*60, typicalVehicle);
 
         return scenario;
     }

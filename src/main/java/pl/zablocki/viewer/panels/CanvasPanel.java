@@ -2,17 +2,16 @@ package pl.zablocki.viewer.panels;
 
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
-import pl.zablocki.viewer.structures.VehicleDataForCanvas;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CanvasPanel extends JPanel implements VehicleDataListener {
 
-	private VehicleDataForCanvas vehicles;
-
+	private List<Vehicle> vehicles = new ArrayList<>();
 
 	CanvasPanel() {
 		super();
@@ -20,8 +19,9 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 		repaint();
 	}
 
-	public void updateVehicles(Set<Vehicle> vehicles) {
-
+	public void updateVehicles(List<Vehicle> vehicles) {
+		this.vehicles = vehicles;
+		repaint();
 	}
 
 	@Override
@@ -31,10 +31,10 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 		setCanvasCenter(g2);
 		g2.drawLine(0,0,700,0);
 
-//		for (Map.Entry<Integer, Vehicle> vehicleEntry : vehicles.entrySet()) {
-//			Vehicle vehicle = vehicleEntry.getValue();
-//			g2.fillOval((int)vehicle.getPosition() , 0, 10,10);
-//		}
+		for (Vehicle vehicle : vehicles) {
+			g2.fillOval((int)vehicle.getDistance() , 0, 10,10);
+		}
+
 	}
 
 	private void setCanvasCenter(Graphics2D g2) {
