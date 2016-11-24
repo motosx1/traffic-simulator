@@ -2,6 +2,7 @@ package pl.zablocki.viewer;
 
 import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.SimulationRunnable;
+import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.VehicleData;
 import pl.zablocki.viewer.panels.MainFrame;
 
@@ -30,7 +31,8 @@ public class AppViewer {
     private Scenario loadScenario() {
         //TODO init with xml
         VehicleData typicalVehicle = new VehicleData();
-        Scenario scenario = new Scenario(4000, 10*60, typicalVehicle);
+        StopLights stopLights = new StopLights();
+        Scenario scenario = new Scenario(4000, 10*60, typicalVehicle, stopLights);
 
         return scenario;
     }

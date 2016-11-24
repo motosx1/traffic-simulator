@@ -17,6 +17,11 @@ public class Position {
         this.distance = position.getDistance();
     }
 
+    public Position(Road currentRoad, double distance) {
+        this.currentRoad = currentRoad;
+        this.distance = distance;
+    }
+
     Road getCurrentRoad() {
         return currentRoad;
     }

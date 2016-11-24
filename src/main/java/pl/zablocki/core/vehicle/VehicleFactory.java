@@ -6,10 +6,16 @@ import java.util.List;
 
 public class VehicleFactory {
 
+    private static int counter = 0;
+
     public static Vehicle createNewVehicle(Scenario scenario, List<Vehicle> activeVehicles) {
         Vehicle firstInList = findFirstVehicle(activeVehicles);
-        System.out.println("tworze");
-        return new Vehicle(scenario.getTypicalVehicle(), firstInList);
+        return new Vehicle(VehicleFactory.counter++, scenario.getTypicalVehicle(), firstInList);
+    }
+
+    public static Vehicle createStopLight(Scenario scenario, List<Vehicle> activeVehicles) {
+        Vehicle firstInList = findFirstVehicle(activeVehicles);
+        return new Vehicle(VehicleFactory.counter++, scenario.getTypicalVehicle(), firstInList);
     }
 
     private static Vehicle findFirstVehicle(List<Vehicle> activeVehicles) {

@@ -1,6 +1,7 @@
 package pl.zablocki.core.simulation;
 
 import pl.zablocki.core.longitudinalmodel.ParamsSingleton;
+import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
 import pl.zablocki.viewer.panels.CanvasPanel;
@@ -25,12 +26,14 @@ public class SimulationRunnable implements Runnable {
 
     public void run() {
         double dt = params.getDt();
-
         double elapsedTime = 0;
+
 
         while (elapsedTime < scenario.getSimulationDuration()) {
             List<Vehicle> vehicles = simulation.doStep(dt, elapsedTime);
+            StopLights stopLights = scenario.getStopLights();
             notifyListeners(vehicles);
+            notifyListeners(stopLights);
             sleep();
             elapsedTime += dt;
         }
@@ -49,6 +52,12 @@ public class SimulationRunnable implements Runnable {
     private void notifyListeners(List<Vehicle> vehicles) {
         listeners.forEach(listener ->
                 listener.updateVehicles(vehicles)
+        );
+    }
+
+    private void notifyListeners(StopLights stopLights) {
+        listeners.forEach(listener ->
+                listener.updateStopLights(stopLights)
         );
     }
 

@@ -1,21 +1,27 @@
 package pl.zablocki.core.vehicle;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class Vehicle {
+public class Vehicle extends Raoadable {
 
-    private Vehicle vehicleInFront;
-    private VehicleData vehicleData;
+    @Getter
+    private Integer id;
+    @Setter
+    private Raoadable vehicleInFront;
 
-    public Vehicle(VehicleData typicalVehicle, Vehicle vehicleInFront) {
-        this.vehicleData = new VehicleData(typicalVehicle);;
+    public Vehicle(Integer id, VehicleData typicalVehicle, Vehicle vehicleInFront) {
+        super(new VehicleData(typicalVehicle));
+        this.id = id;
+//        this.vehicleData = new VehicleData(typicalVehicle);
         this.vehicleInFront = vehicleInFront; //reference
     }
 
     public void updateParameters(double timeElapsed) {
         double calculatedNewAcc = calcAcc();
-        setAcceleration(calculatedNewAcc > 0 ? calculatedNewAcc : 0);
+        setAcceleration(calculatedNewAcc);
         setSpeed(getSpeed() + getAcceleration() * timeElapsed);
         setDistance(getDistance() + (getSpeed() * timeElapsed) + (getAcceleration() * Math.sqrt(timeElapsed) * 0.5));
     }
@@ -90,42 +96,12 @@ public class Vehicle {
     }
 
 
-    private VehicleData getVehicleData() {
-        return vehicleData;
-    }
+//    private VehicleData getVehicleData() {
+//        return getVehicleData()
+//    }
 
 
-    private void setAcceleration(double acc) {
-        this.vehicleData.getParams().setAcceleration(acc);
-    }
 
-    private void setDistance(double pos) {
-        this.vehicleData.getPosition().setDistance(pos);
-    }
-
-    private double getSpeed() {
-        return this.getVehicleData().getParams().getSpeed();
-    }
-
-    private double getLength() {
-        return this.getVehicleData().getParams().getLength();
-    }
-
-    private double getDesiredSpeed() {
-        return this.getVehicleData().getParams().getDesiredSpeed();
-    }
-
-    private void setSpeed(double speed) {
-        this.getVehicleData().getParams().setSpeed(speed);
-    }
-
-    private double getAcceleration() {
-        return this.getVehicleData().getParams().getAcceleration();
-    }
-
-    public double getDistance() {
-        return this.getVehicleData().getPosition().getDistance();
-    }
 
 
 }
