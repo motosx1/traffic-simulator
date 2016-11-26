@@ -30,8 +30,9 @@ public class SimulationRunnable implements Runnable {
 
 
         while (elapsedTime < scenario.getSimulationDuration()) {
-            List<Vehicle> vehicles = simulation.doStep(dt, elapsedTime);
-            StopLights stopLights = scenario.getStopLights();
+            RoadObjects roadObjects = simulation.doStep(dt, elapsedTime);
+            List<Vehicle> vehicles = roadObjects.getVehicles();
+            StopLights stopLights = roadObjects.getStopLights();
             notifyListeners(vehicles);
             notifyListeners(stopLights);
             sleep();
@@ -67,7 +68,7 @@ public class SimulationRunnable implements Runnable {
 
     private void sleep() {
         try {
-            Thread.sleep(50);
+            Thread.sleep(25);
         } catch (InterruptedException e) {
             System.err.println(e);
         }

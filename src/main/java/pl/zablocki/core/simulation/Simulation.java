@@ -1,5 +1,6 @@
 package pl.zablocki.core.simulation;
 
+import pl.zablocki.core.roadnetwork.StopLightsEngine;
 import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleFactory;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public class Simulation {
 
+    private RoadObjects roadObjects = new RoadObjects();
     private List<Vehicle> activeVehicles = new ArrayList<>();
     private Scenario scenario;
 
@@ -25,39 +27,42 @@ public class Simulation {
 
     }
 
-    List<Vehicle> doStep(double dt, double elapsedTime) {
+    RoadObjects doStep(double dt, double elapsedTime) {
+        StopLights stopLight = scenario.getStopLights();
+
+        StopLightsEngine.changeLight(stopLight, dt, elapsedTime);
+
         activeVehicles.forEach(vehicle -> {
             vehicle.updateParameters(dt);
 
-            StopLights stopLights = scenario.getStopLights();
-            if (stopLights.isBroadcastingRed() && (stopLights.getDistance() - stopLights.getNotifyRadius() - vehicle.getDistance() < vehicle.getSpeed())) {
-                stopLights.setBroadcastingRed(false);
-                System.out.println("samochód o id " + vehicle.getId() + " w zasiegu swiatel (distance: " + vehicle.getDistance() + ")");
-                vehicle.setVehicleInFront(stopLights);
+            if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
+                vehicle.setStopLights(stopLight);
+                stopLight.setBroadcastingRed(false);
+            }
+
+            if (stopLight.isBroadcastingGreen()) {
+                if (vehicle.getStopLights() != null && vehicle.getStopLights().equals(stopLight)) {
+                    vehicle.setStopLights(null);
+                    vehicle.updateParameters(dt);
+                }
             }
         });
 
-        changeLights(dt, elapsedTime);
 
         // TODO co jeśli powinny się stworzyć 2 samochody w jednym momencie?
-        if (elapsedTime % (3600 / scenario.getCarsPerHour()) < dt) {
+        if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
             createNewVehicles();
         }
 
         deleteNotActiveVehicles();
 
-        return activeVehicles;
+        roadObjects.setVehicles(activeVehicles);
+        roadObjects.setStopLights(scenario.getStopLights());
+        return roadObjects;
     }
 
-    private void changeLights(double dt, double elapsedTime) {
-        StopLights stopLights = scenario.getStopLights();
-
-        if( stopLights.isRed() && (elapsedTime % stopLights.getRedLightTime() < dt) ){
-            stopLights.setGreen();
-        }
-        if( stopLights.isGreen() && (elapsedTime % stopLights.getGreenLightTime() < dt) ){
-            stopLights.setRed();
-        }
+    private boolean isTimeTo(double frequencyPerHour, double dt, double elapsedTime) {
+        return elapsedTime % (3600 / frequencyPerHour) < dt;
     }
 
 

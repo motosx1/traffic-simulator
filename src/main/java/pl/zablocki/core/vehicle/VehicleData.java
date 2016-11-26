@@ -12,23 +12,9 @@ public class VehicleData {
 	}
 
 	public VehicleData(VehicleData typicalVehicle) {
-		this.position = new Position(typicalVehicle.getPosition());
-		this.params = new VehicleParams(typicalVehicle.getParams());
+		this.position = new Position(typicalVehicle.position);
+		this.params = new VehicleParams(typicalVehicle.params);
 	}
 
-	Position getPosition() {
-		return position;
-	}
 
-	void setPosition(Position position) {
-		this.position = position;
-	}
-
-	VehicleParams getParams() {
-		return params;
-	}
-
-	void setParams(VehicleParams params) {
-		this.params = params;
-	}
 }

@@ -18,7 +18,7 @@ public class VehicleParams {
     private int length = 10;
     @Setter
     @Getter
-    private double speed = 0;
+    private double speed = 20;
 
     public VehicleParams() {
     }

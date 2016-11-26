@@ -5,17 +5,20 @@ import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class Vehicle extends Raoadable {
+public class Vehicle {
 
     @Getter
     private Integer id;
     @Setter
-    private Raoadable vehicleInFront;
+    private Vehicle vehicleInFront;
+    @Setter
+    @Getter
+    private StopLights stopLights;
+    private VehicleData vehicleData;
 
     public Vehicle(Integer id, VehicleData typicalVehicle, Vehicle vehicleInFront) {
-        super(new VehicleData(typicalVehicle));
         this.id = id;
-//        this.vehicleData = new VehicleData(typicalVehicle);
+        this.vehicleData = new VehicleData(typicalVehicle);
         this.vehicleInFront = vehicleInFront; //reference
     }
 
@@ -29,17 +32,17 @@ public class Vehicle extends Raoadable {
 
     private double calcAcc() {
 
-        double s = getDistanceToFrontVehicle();
+        double s = getDistanceToFrontObject();
         double v = getSpeed();
         double dv = getRelativeSpeed();
-        double aLead = vehicleInFront == null ? getAcceleration() : vehicleInFront.getAcceleration();
+        double accLead = getObjectsInFrontAcc();
 
         double tLocal = 1;
         double v0Local = getDesiredSpeed();
         double aLocal = 2.2;
 
         // actual Gipps formula
-        return acc(s, v, dv, aLead, tLocal, v0Local, aLocal);
+        return acc(s, v, dv, accLead, tLocal, v0Local, aLocal);
 
     }
 
@@ -78,13 +81,26 @@ public class Vehicle extends Raoadable {
     }
 
     private double getRelativeSpeed() {
+        if (stopLights != null) {
+            return getSpeed();
+        }
         if (vehicleInFront != null) {
             return getSpeed() - vehicleInFront.getSpeed();
         }
         return 0;
     }
 
-    private double getDistanceToFrontVehicle() {
+    private double getObjectsInFrontAcc() {
+        if( stopLights != null ){
+            return 0;
+        }
+        return vehicleInFront == null ? getAcceleration() : vehicleInFront.getAcceleration();
+    }
+
+    private double getDistanceToFrontObject() {
+        if (stopLights != null) {
+            return stopLights.getDistance() - this.getDistance();
+        }
         if (vehicleInFront != null) {
             return Math.abs(vehicleInFront.getDistance() - this.getDistance()) - vehicleInFront.getLength();
         }
@@ -95,13 +111,56 @@ public class Vehicle extends Raoadable {
         return 2;
     }
 
-
-//    private VehicleData getVehicleData() {
-//        return getVehicleData()
-//    }
-
+    public VehicleData getVehicleInFront() {
+        return vehicleInFront != null ? vehicleInFront.vehicleData : null;
+    }
 
 
+    Position getPosition() {
+        return vehicleData.position;
+    }
 
+    void setPosition(Position position) {
+        this.vehicleData.position = position;
+    }
 
+    VehicleParams getParams() {
+        return vehicleData.params;
+    }
+
+    void setParams(VehicleParams params) {
+        this.vehicleData.params = params;
+    }
+
+    void setAcceleration(double acc) {
+        this.getParams().setAcceleration(acc);
+    }
+
+    void setDistance(double pos) {
+        this.getPosition().setDistance(pos);
+    }
+
+    public double getSpeed() {
+        return this.getParams().getSpeed();
+    }
+
+    public double getLength() {
+        return this.getParams().getLength();
+    }
+
+    public double getDesiredSpeed() {
+        return this.getParams().getDesiredSpeed();
+    }
+
+    public void setSpeed(double speed) {
+        this.getParams().setSpeed(speed);
+    }
+
+    public double getAcceleration() {
+        return this.getParams().getAcceleration();
+    }
+
+    public double getDistance() {
+        return this.getPosition().getDistance();
+    }
 }

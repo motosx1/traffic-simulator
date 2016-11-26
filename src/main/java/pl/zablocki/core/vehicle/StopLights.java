@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.awt.*;
 
-public class StopLights extends Raoadable {
+public class StopLights {
 
     @Getter
     private int notifyRadius = 100;
@@ -15,23 +15,15 @@ public class StopLights extends Raoadable {
     @Getter
     private Color color = Color.RED;
     @Getter
-    private int greenLightTime;
+    private int greenLightTimeSec;
     @Getter
-    private int redLightTime;
+    private int redLightTimeSec;
+    private Position position;
 
     public StopLights() {
-        VehicleData vehicleData = new VehicleData();
-        vehicleData.setPosition(new Position(null, 600));
-
-        VehicleParams params = new VehicleParams();
-        params.setSpeed(0);
-        params.setAcceleration(0);
-        params.setDesiredSpeed(0);
-        vehicleData.setParams(params);
-        this.setVehicleData(vehicleData);
-
-        greenLightTime = 3;
-        redLightTime = 3;
+        position = new Position(null, 800);
+        greenLightTimeSec = 15;
+        redLightTimeSec = 60;
     }
 
 
@@ -58,9 +50,43 @@ public class StopLights extends Raoadable {
 
     public void setBroadcastingRed(boolean broadcastingRed) {
         this.broadcastingRed = broadcastingRed;
+        broadcastingGreen = false;
     }
 
     public void setBroadcastingGreen(boolean broadcastingGreen) {
         this.broadcastingGreen = broadcastingGreen;
+        broadcastingRed = false;
+    }
+
+    Position getPosition() {
+        return position;
+    }
+
+    void setPosition(Position position) {
+        this.position = position;
+    }
+
+    void setDistance(double pos) {
+        this.getPosition().setDistance(pos);
+    }
+
+    public double getDistance() {
+        return this.getPosition().getDistance();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StopLights that = (StopLights) o;
+
+        return position.equals(that.position);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return position.hashCode();
     }
 }
