@@ -28,7 +28,7 @@ public class VehicleFactory {
 
         for (Vehicle vehicle : activeVehicles) {
             double vehicleDistance = vehicle.getDistance();
-            if (theClosestVehicleDistance > vehicleDistance){
+            if (theClosestVehicleDistance > vehicleDistance) {
                 theClosestVehicle = vehicle;
             }
         }

@@ -7,47 +7,47 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-	static final int FRAME_WIDTH = 1900;
-	static final int FRAME_HEIGHT = 800;
-	private static final int BUTTONS_PANEL_WIDTH = 150;
-	@Getter
-	private CanvasPanel canvas = null;
+    static final int FRAME_WIDTH = 1900;
+    static final int FRAME_HEIGHT = 800;
+    private static final int BUTTONS_PANEL_WIDTH = 150;
+    @Getter
+    private CanvasPanel canvas = null;
 
-	public MainFrame() {
-		super("Camera Simulator v1");
-		this.canvas = new CanvasPanel();
+    public MainFrame() {
+        super("Camera Simulator v1");
+        this.canvas = new CanvasPanel();
 
-		setUpFrame();
-		addCanvas();
-		addButtonsPanel();
+        setUpFrame();
+        addCanvas();
+        addButtonsPanel();
 
-		pack();
-		setVisible(true);
-	}
+        pack();
+        setVisible(true);
+    }
 
-	private void addButtonsPanel() {
-		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setPreferredSize(new Dimension(BUTTONS_PANEL_WIDTH, (int)buttonsPanel.getPreferredSize().getHeight()));
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.PAGE_AXIS));
+    private void addButtonsPanel() {
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setPreferredSize(new Dimension(BUTTONS_PANEL_WIDTH, (int) buttonsPanel.getPreferredSize().getHeight()));
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.PAGE_AXIS));
 
-		add(buttonsPanel, BorderLayout.EAST);
-	}
+        add(buttonsPanel, BorderLayout.EAST);
+    }
 
-	private void addCanvas() {
-		add(canvas,BorderLayout.CENTER);
-	}
+    private void addCanvas() {
+        add(canvas, BorderLayout.CENTER);
+    }
 
-	private void setUpFrame() {
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private void setUpFrame() {
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-		setLocation(((int)screenSize.getWidth() - FRAME_WIDTH)/2,100);
-		setLayout(new BorderLayout());
-	}
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
+        setLocation(((int) screenSize.getWidth() - FRAME_WIDTH) / 2, 100);
+        setLayout(new BorderLayout());
+    }
 
 
-	static Dimension getCanvasPanelSize(){
-		return new Dimension(FRAME_WIDTH-BUTTONS_PANEL_WIDTH, FRAME_HEIGHT);
-	}
+    static Dimension getCanvasPanelSize() {
+        return new Dimension(FRAME_WIDTH - BUTTONS_PANEL_WIDTH, FRAME_HEIGHT);
+    }
 }

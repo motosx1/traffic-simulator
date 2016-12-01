@@ -8,11 +8,14 @@ import pl.zablocki.core.vehicle.Vehicle;
 import java.util.List;
 
 public class RoadObjects {
-    @Getter @Setter
+    @Getter
+    @Setter
     List<Vehicle> vehicles;
-    @Getter @Setter
+    @Getter
+    @Setter
     StopLights stopLights;
-    @Getter @Setter
+    @Getter
+    @Setter
     double elapsedTime;
 
 }

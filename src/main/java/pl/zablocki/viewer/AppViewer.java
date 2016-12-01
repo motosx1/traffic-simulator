@@ -32,7 +32,7 @@ public class AppViewer {
         //TODO init with xml
         VehicleData typicalVehicle = new VehicleData();
         StopLights stopLights = new StopLights();
-        Scenario scenario = new Scenario(2000, 100*60, typicalVehicle, stopLights);
+        Scenario scenario = new Scenario(2000, 100 * 60, typicalVehicle, stopLights);
 
         return scenario;
     }

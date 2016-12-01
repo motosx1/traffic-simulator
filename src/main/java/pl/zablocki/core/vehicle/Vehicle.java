@@ -170,6 +170,7 @@ public class Vehicle {
     public double getMaxAcceleration() {
         return this.getParams().getMaxAcceleration();
     }
+
     public double getAcceleration() {
         return this.getParams().getAcceleration();
     }

@@ -30,6 +30,7 @@ public class StopLights {
     public boolean isRed() {
         return color == Color.RED;
     }
+
     public boolean isGreen() {
         return color == Color.GREEN;
     }

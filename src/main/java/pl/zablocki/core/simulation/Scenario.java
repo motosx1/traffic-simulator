@@ -11,12 +11,12 @@ import pl.zablocki.core.vehicle.VehicleData;
 @ToString
 public class Scenario {
 
-	@Getter
-	private final double carsPerHour;
-	@Getter
-	private final double simulationDuration;
-	@Getter
-	private final VehicleData typicalVehicle;
-	@Getter
-	private final StopLights stopLights;
+    @Getter
+    private final double carsPerHour;
+    @Getter
+    private final double simulationDuration;
+    @Getter
+    private final VehicleData typicalVehicle;
+    @Getter
+    private final StopLights stopLights;
 }

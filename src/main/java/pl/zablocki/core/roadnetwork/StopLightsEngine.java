@@ -13,12 +13,12 @@ public class StopLightsEngine {
     public static void changeLight(StopLights stopLights, double dt, double elapsedTime) {
         boolean hasChanged = false;
 
-        if( stopLights.isRed() && (elapsedTime % stopLights.getRedLightTimeSec() < dt) ){
+        if (stopLights.isRed() && (elapsedTime % stopLights.getRedLightTimeSec() < dt)) {
             stopLights.setGreen();
             stopLights.setBroadcastingGreen(true);
             hasChanged = true;
         }
-        if( !hasChanged && stopLights.isGreen() && (elapsedTime % stopLights.getGreenLightTimeSec() < dt) ){
+        if (!hasChanged && stopLights.isGreen() && (elapsedTime % stopLights.getGreenLightTimeSec() < dt)) {
             stopLights.setRed();
             stopLights.setBroadcastingRed(true);
         }
