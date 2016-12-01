@@ -25,10 +25,11 @@ public class Vehicle {
     public void updateParameters(double timeElapsed) {
         double calculatedNewAcc = calcAcc();
         setAcceleration(calculatedNewAcc);
-        setSpeed(getSpeed() + getAcceleration() * timeElapsed);
+        double speed = getSpeed() + getAcceleration() * timeElapsed;
+        speed = validateSpeed(speed);
+        setSpeed(speed);
         setDistance(getDistance() + (getSpeed() * timeElapsed) + (getAcceleration() * Math.sqrt(timeElapsed) * 0.5));
     }
-
 
     private double calcAcc() {
 
@@ -39,12 +40,13 @@ public class Vehicle {
 
         double tLocal = 1;
         double v0Local = getDesiredSpeed();
-        double aLocal = 2.2;
+        double aLocal = 5.2;
 
         // actual Gipps formula
         return acc(s, v, dv, accLead, tLocal, v0Local, aLocal);
 
     }
+
 
     private double acc(double s, double v, double dv, double aLead, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
@@ -80,6 +82,15 @@ public class Vehicle {
         return (accIIDM > accCAH) ? accIIDM : (1 - coolness) * accIIDM + coolness * (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
     }
 
+    private double validateSpeed(double speed) {
+        if (speed < 0) {
+            speed = 0;
+        } else if (speed > getDesiredSpeed()) {
+            speed = getDesiredSpeed();
+        }
+        return speed;
+    }
+
     private double getRelativeSpeed() {
         if (stopLights != null) {
             return getSpeed();
@@ -91,7 +102,7 @@ public class Vehicle {
     }
 
     private double getObjectsInFrontAcc() {
-        if( stopLights != null ){
+        if (stopLights != null) {
             return 0;
         }
         return vehicleInFront == null ? getAcceleration() : vehicleInFront.getAcceleration();

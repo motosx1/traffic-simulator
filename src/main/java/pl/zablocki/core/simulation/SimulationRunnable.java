@@ -68,7 +68,7 @@ public class SimulationRunnable implements Runnable {
 
     private void sleep() {
         try {
-            Thread.sleep(25);
+            Thread.sleep(40);
         } catch (InterruptedException e) {
             System.err.println(e);
         }

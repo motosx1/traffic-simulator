@@ -48,10 +48,21 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 		}
 
 		for (Vehicle vehicle : vehicles) {
-			g2.fillOval((int)vehicle.getDistance() , 0, 10,10);
-			g2.drawString(""+vehicle.getId(), (int)vehicle.getDistance(), 20 );
+			Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getDesiredSpeed());
+
+			g2.setColor(color);
+			g2.fillRect((int)vehicle.getDistance(), 0, (int)vehicle.getLength(), 10);
+			g2.setColor(Color.BLACK);
+			g2.drawString(""+vehicle.getId()+"/"+(int)vehicle.getSpeed(), (int)vehicle.getDistance(), 20 );
 		}
 
+	}
+
+	private Color getRedGreenScaledColor(double speed, double desiredSpeed) {
+		double colorFactor = 255 / desiredSpeed;
+		int green = Math.min((int) (speed * colorFactor),255);
+		int red = 255 - green;
+		return new Color(red, green, 0);
 	}
 
 	private void setCanvasCenter(Graphics2D g2) {
