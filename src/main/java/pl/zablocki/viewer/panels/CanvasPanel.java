@@ -1,5 +1,6 @@
 package pl.zablocki.viewer.panels;
 
+import pl.zablocki.core.simulation.RoadObjects;
 import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
@@ -21,13 +22,9 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 		repaint();
 	}
 
-	public void updateVehicles(List<Vehicle> vehicles) {
-		this.vehicles = vehicles;
-		repaint();
-	}
-
-	public void updateStopLights(StopLights stopLights) {
-		this.stopLights = stopLights;
+	public void updateRoadObjects(RoadObjects roadObjects){
+		this.vehicles = roadObjects.getVehicles();
+		this.stopLights = roadObjects.getStopLights();
 		repaint();
 	}
 

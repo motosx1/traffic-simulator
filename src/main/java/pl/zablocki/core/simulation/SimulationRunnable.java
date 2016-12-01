@@ -1,8 +1,6 @@
 package pl.zablocki.core.simulation;
 
 import pl.zablocki.core.longitudinalmodel.ParamsSingleton;
-import pl.zablocki.core.vehicle.StopLights;
-import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
 import pl.zablocki.viewer.panels.CanvasPanel;
 import pl.zablocki.viewer.panels.MainFrame;
@@ -28,13 +26,9 @@ public class SimulationRunnable implements Runnable {
         double dt = params.getDt();
         double elapsedTime = 0;
 
-
         while (elapsedTime < scenario.getSimulationDuration()) {
             RoadObjects roadObjects = simulation.doStep(dt, elapsedTime);
-            List<Vehicle> vehicles = roadObjects.getVehicles();
-            StopLights stopLights = roadObjects.getStopLights();
-            notifyListeners(vehicles);
-            notifyListeners(stopLights);
+            notifyListeners(roadObjects);
             sleep();
             elapsedTime += dt;
         }
@@ -45,20 +39,13 @@ public class SimulationRunnable implements Runnable {
         listeners.add(vehicleDataListener);
     }
 
-
     public CanvasPanel getCanvas() {
         return mainFrame.getCanvas();
     }
 
-    private void notifyListeners(List<Vehicle> vehicles) {
+    private void notifyListeners(RoadObjects roadObjects) {
         listeners.forEach(listener ->
-                listener.updateVehicles(vehicles)
-        );
-    }
-
-    private void notifyListeners(StopLights stopLights) {
-        listeners.forEach(listener ->
-                listener.updateStopLights(stopLights)
+                listener.updateRoadObjects(roadObjects)
         );
     }
 

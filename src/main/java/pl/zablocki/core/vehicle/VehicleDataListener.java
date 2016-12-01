@@ -1,8 +1,9 @@
 package pl.zablocki.core.vehicle;
 
+import pl.zablocki.core.simulation.RoadObjects;
+
 import java.util.List;
 
 public interface VehicleDataListener {
-    public void updateVehicles(List<Vehicle> vehicles);
-    public void updateStopLights(StopLights stopLights);
+    public void updateRoadObjects(RoadObjects roadObjects);
 }
