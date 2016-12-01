@@ -12,5 +12,7 @@ public class RoadObjects {
     List<Vehicle> vehicles;
     @Getter @Setter
     StopLights stopLights;
+    @Getter @Setter
+    double elapsedTime;
 
 }

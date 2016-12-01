@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-	private static final int FRAME_WIDTH = 1900;
-	private static final int FRAME_HEIGHT = 800;
+	static final int FRAME_WIDTH = 1900;
+	static final int FRAME_HEIGHT = 800;
 	private static final int BUTTONS_PANEL_WIDTH = 150;
 	@Getter
 	private CanvasPanel canvas = null;

@@ -22,7 +22,7 @@ public class StopLights {
 
     public StopLights() {
         position = new Position(null, 1600);
-        greenLightTimeSec = 150;
+        greenLightTimeSec = 100;
         redLightTimeSec = 10;
     }
 

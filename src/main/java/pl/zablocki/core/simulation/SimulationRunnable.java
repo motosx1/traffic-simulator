@@ -28,11 +28,11 @@ public class SimulationRunnable implements Runnable {
 
         while (elapsedTime < scenario.getSimulationDuration()) {
             RoadObjects roadObjects = simulation.doStep(dt, elapsedTime);
+            roadObjects.setElapsedTime(elapsedTime);
             notifyListeners(roadObjects);
             sleep();
             elapsedTime += dt;
         }
-
     }
 
     public void addListener(VehicleDataListener vehicleDataListener) {
