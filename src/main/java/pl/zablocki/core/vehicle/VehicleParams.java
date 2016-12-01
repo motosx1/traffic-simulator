@@ -9,7 +9,10 @@ public class VehicleParams {
 
     @Setter
     @Getter
-    private double acceleration = 0.6;
+    private double acceleration;
+    @Setter
+    @Getter
+    private double maxAcceleration = 1.2;
     @Setter
     @Getter
     private double desiredSpeed = 30;
@@ -18,7 +21,7 @@ public class VehicleParams {
     private int length = 20;
     @Setter
     @Getter
-    private double speed = 15;
+    private double speed = 30;
 
     public VehicleParams() {
     }

@@ -40,7 +40,7 @@ public class Vehicle {
 
         double tLocal = 1;
         double v0Local = getDesiredSpeed();
-        double aLocal = 5.2;
+        double aLocal = getMaxAcceleration();
 
         // actual Gipps formula
         return acc(s, v, dv, accLead, tLocal, v0Local, aLocal);
@@ -56,7 +56,7 @@ public class Vehicle {
 
         double s1 = 0;
         double delta = 4;
-        double b = 2;
+        double b = 50;  // im wieksze tym ostrzejsze hamowanie :)
         double coolness = 1;
 
 
@@ -167,6 +167,9 @@ public class Vehicle {
         this.getParams().setSpeed(speed);
     }
 
+    public double getMaxAcceleration() {
+        return this.getParams().getMaxAcceleration();
+    }
     public double getAcceleration() {
         return this.getParams().getAcceleration();
     }

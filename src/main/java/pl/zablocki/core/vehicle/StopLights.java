@@ -21,23 +21,17 @@ public class StopLights {
     private Position position;
 
     public StopLights() {
-        position = new Position(null, 800);
-        greenLightTimeSec = 25;
-        redLightTimeSec = 50;
+        position = new Position(null, 1600);
+        greenLightTimeSec = 150;
+        redLightTimeSec = 10;
     }
 
 
     public boolean isRed() {
-        if( color == Color.RED ){
-            return true;
-        }
-        return false;
+        return color == Color.RED;
     }
     public boolean isGreen() {
-        if( color == Color.GREEN ){
-            return true;
-        }
-        return false;
+        return color == Color.GREEN;
     }
 
     public void setRed() {

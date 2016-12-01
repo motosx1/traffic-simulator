@@ -7,6 +7,7 @@ import pl.zablocki.core.vehicle.VehicleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Simulation {
 
@@ -49,9 +50,10 @@ public class Simulation {
         });
 
 
-        // TODO co jeśli powinny się stworzyć 2 samochody w jednym momencie?
         if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
-            createNewVehicles();
+            if (isPossibleToCreateNewVehicles()) {
+                createNewVehicles();
+            }
         }
 
         deleteNotActiveVehicles();
@@ -59,6 +61,13 @@ public class Simulation {
         roadObjects.setVehicles(activeVehicles);
         roadObjects.setStopLights(scenario.getStopLights());
         return roadObjects;
+    }
+
+    private boolean isPossibleToCreateNewVehicles() {
+        List<Vehicle> vehiclesAtStart = activeVehicles.stream()
+                .filter(v -> v.getDistance() < v.getLength())
+                .collect(Collectors.toList());
+        return vehiclesAtStart.size() == 0;
     }
 
     private boolean isTimeTo(double frequencyPerHour, double dt, double elapsedTime) {
