@@ -3,6 +3,7 @@ package pl.zablocki.core.vehicle;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import pl.zablocki.core.roadnetwork.Road;
 
 @ToString
 public class Vehicle {
@@ -177,5 +178,9 @@ public class Vehicle {
 
     public double getDistance() {
         return this.getPosition().getDistance();
+    }
+
+    public Road getRoad() {
+        return this.getPosition().getCurrentRoad();
     }
 }

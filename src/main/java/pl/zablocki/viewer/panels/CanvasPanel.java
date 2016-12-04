@@ -36,6 +36,8 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     @Override
     public void paint(Graphics g) {
+        int roadWidth = 14;
+
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
         setCanvasCenter(g2);
@@ -56,10 +58,11 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         g2.drawLine(0, 12, MainFrame.FRAME_WIDTH, 12);
 
         for (Vehicle vehicle : vehicles) {
+            int roadPositionY = 0;//vehicle.getRoad().getId() * roadWidth;
             Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getDesiredSpeed());
 
             g2.setColor(color);
-            g2.fillRect((int) vehicle.getDistance(), 0, (int) vehicle.getLength(), 10);
+            g2.fillRect((int) vehicle.getDistance(), roadPositionY, (int) vehicle.getLength(), 10);
             g2.setColor(Color.BLACK);
             g2.drawString("" + vehicle.getId() + "/" + (int) vehicle.getSpeed(), (int) vehicle.getDistance(), 24);
         }
