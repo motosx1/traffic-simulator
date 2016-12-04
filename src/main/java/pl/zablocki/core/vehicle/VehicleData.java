@@ -1,10 +1,12 @@
 package pl.zablocki.core.vehicle;
 
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 public class VehicleData {
 
+    @Getter
     Position position = new Position();
     VehicleParams params = new VehicleParams();
 
@@ -17,4 +19,7 @@ public class VehicleData {
     }
 
 
+    public VehicleData(Position position) {
+        this.position = position;
+    }
 }

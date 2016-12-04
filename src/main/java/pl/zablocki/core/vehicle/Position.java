@@ -6,14 +6,14 @@ import pl.zablocki.core.roadnetwork.Road;
 @ToString
 public class Position {
 
-    private Road currentRoad = null;
+    private Road currentRoad = new Road();
     private double distance = 0;
 
     public Position() {
     }
 
     public Position(Position position) {
-        this.currentRoad = null;
+        this.currentRoad = position.getCurrentRoad();
         this.distance = position.getDistance();
     }
 
@@ -22,7 +22,7 @@ public class Position {
         this.distance = distance;
     }
 
-    Road getCurrentRoad() {
+    public Road getCurrentRoad() {
         return currentRoad;
     }
 

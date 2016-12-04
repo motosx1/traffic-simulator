@@ -1,16 +1,17 @@
 package pl.zablocki.core.roadnetwork;
 
-public abstract class Road {
+import lombok.Getter;
 
-    private int id;
+public class Road {
+
+    @Getter
+    private int id = 10;
     private int priority;
 
     public Road() {
-
     }
 
-    public int getNewPosition(int timeElapsed) {
-        return 0;
+    public Road(int id) {
+        this.id=id;
     }
-
 }

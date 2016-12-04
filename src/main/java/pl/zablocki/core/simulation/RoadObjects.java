@@ -5,10 +5,10 @@ import lombok.Setter;
 import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.Vehicle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoadObjects {
-    @Getter
     @Setter
     List<Vehicle> vehicles;
     @Getter
@@ -18,4 +18,10 @@ public class RoadObjects {
     @Setter
     double elapsedTime;
 
+    public List<Vehicle> getVehicles() {
+        if (vehicles == null) {
+            this.vehicles = new ArrayList<>();
+        }
+        return vehicles;
+    }
 }

@@ -19,4 +19,5 @@ public class Scenario {
     private final VehicleData typicalVehicle;
     @Getter
     private final StopLights stopLights;
+
 }

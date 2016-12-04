@@ -1,6 +1,7 @@
 package pl.zablocki.core.vehicle;
 
 import lombok.Getter;
+import pl.zablocki.core.roadnetwork.Road;
 
 import java.awt.*;
 
@@ -19,8 +20,11 @@ public class StopLights {
     @Getter
     private int redLightTimeSec;
     private Position position;
+    @Getter
+    private Road road = new Road();
 
-    public StopLights() {
+    public StopLights(Road road) {
+        this.road = road;
         position = new Position(null, 1600);
         greenLightTimeSec = 100;
         redLightTimeSec = 10;

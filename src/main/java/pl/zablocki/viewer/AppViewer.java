@@ -1,7 +1,9 @@
 package pl.zablocki.viewer;
 
+import pl.zablocki.core.roadnetwork.Road;
 import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.SimulationRunnable;
+import pl.zablocki.core.vehicle.Position;
 import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.VehicleData;
 import pl.zablocki.viewer.panels.MainFrame;
@@ -30,11 +32,17 @@ public class AppViewer {
 
     private Scenario loadScenario() {
         //TODO init with xml
-        VehicleData typicalVehicle = new VehicleData();
-        StopLights stopLights = new StopLights();
-        Scenario scenario = new Scenario(2000, 100 * 60, typicalVehicle, stopLights);
+        Road road = new Road(20);
+        Position position = new Position(road, 0);
+        VehicleData typicalVehicle = new VehicleData(position);
+        StopLights stopLights = new StopLights(road);
+        Scenario scenario1 = new Scenario(2000, 100 * 60, typicalVehicle, stopLights);
 
-        return scenario;
+//        VehicleData typicalVehicle2 = new VehicleData();
+//        StopLights stopLights2 = new StopLights();
+//        Scenario scenario2 = new Scenario(2000, 100 * 60, typicalVehicle2, stopLights2);
+
+        return scenario1;
     }
 
     private void initFrame() {
