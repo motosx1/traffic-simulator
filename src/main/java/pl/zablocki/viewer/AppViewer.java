@@ -2,6 +2,7 @@ package pl.zablocki.viewer;
 
 import pl.zablocki.core.roadnetwork.Road;
 import pl.zablocki.core.simulation.Scenario;
+import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
 import pl.zablocki.core.vehicle.Position;
 import pl.zablocki.core.vehicle.StopLights;
@@ -10,7 +11,7 @@ import pl.zablocki.viewer.panels.MainFrame;
 
 public class AppViewer {
 
-    private Scenario scenario;
+    private Scenarios scenarios;
     private MainFrame mainFrame;
 
     public static void main(String[] args) {
@@ -20,29 +21,36 @@ public class AppViewer {
     }
 
     private void run() {
-        SimulationRunnable simulationRunnable = new SimulationRunnable(scenario);
+        SimulationRunnable simulationRunnable = new SimulationRunnable(scenarios);
         simulationRunnable.addListener(mainFrame.getCanvas());
         simulationRunnable.run();
     }
 
     private void init() {
-        this.scenario = loadScenario();
+        this.scenarios = loadScenarios();
         initFrame();
     }
 
-    private Scenario loadScenario() {
+    private Scenarios loadScenarios() {
         //TODO init with xml
-        Road road = new Road(20);
+        Road road = new Road(0);
         Position position = new Position(road, 0);
         VehicleData typicalVehicle = new VehicleData(position);
         StopLights stopLights = new StopLights(road);
-        Scenario scenario1 = new Scenario(2000, 100 * 60, typicalVehicle, stopLights);
+        Scenario scenario1 = new Scenario(0, 2000, 100 * 60, typicalVehicle, stopLights);
 
-//        VehicleData typicalVehicle2 = new VehicleData();
-//        StopLights stopLights2 = new StopLights();
-//        Scenario scenario2 = new Scenario(2000, 100 * 60, typicalVehicle2, stopLights2);
+        Road road2 = new Road(10);
+        Position position2 = new Position(road2, 0);
+        VehicleData typicalVehicle2 = new VehicleData(position2);
+        StopLights stopLights2 = new StopLights(road2);
+        Scenario scenario2 = new Scenario(1, 2000, 100 * 60, typicalVehicle2, stopLights2);
 
-        return scenario1;
+        Scenarios scenarios = new Scenarios();
+        scenarios.setSimulationDuration(100 * 60);
+        scenarios.getScenarios().add(scenario1);
+        scenarios.getScenarios().add(scenario2);
+
+        return scenarios;
     }
 
     private void initFrame() {

@@ -10,15 +10,15 @@ import java.util.List;
 
 public class SimulationRunnable implements Runnable {
 
-    private Scenario scenario;
+    private Scenarios scenarios;
     private MainFrame mainFrame;
     private Simulation simulation;
     private List<VehicleDataListener> listeners = new ArrayList<VehicleDataListener>();
     private ParamsSingleton params = ParamsSingleton.getInstance();
 
 
-    public SimulationRunnable(Scenario scenario) {
-        this.scenario = scenario;
+    public SimulationRunnable(Scenarios scenarios) {
+        this.scenarios = scenarios;
         prepareSimulation();
     }
 
@@ -26,7 +26,7 @@ public class SimulationRunnable implements Runnable {
         double dt = params.getDt();
         double elapsedTime = 0;
 
-        while (elapsedTime < scenario.getSimulationDuration()) {
+        while (elapsedTime < scenarios.getSimulationDuration()) {
             RoadObjects roadObjects = simulation.doStep(dt, elapsedTime);
             roadObjects.setElapsedTime(elapsedTime);
             notifyListeners(roadObjects);
@@ -50,7 +50,7 @@ public class SimulationRunnable implements Runnable {
     }
 
     private void prepareSimulation() {
-        this.simulation = new Simulation(scenario);
+        this.simulation = new Simulation(scenarios);
     }
 
     private void sleep() {

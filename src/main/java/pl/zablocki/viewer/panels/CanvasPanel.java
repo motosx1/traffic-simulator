@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     private List<Vehicle> vehicles = new ArrayList<>();
-    private StopLights stopLights;
+    private List<StopLights> stopLightsList = new ArrayList<>();
     private RoadObjects roadObjects;
     private List<Road> uniqueRoads = new ArrayList<>();
     NumberFormat decimalFormatter = new DecimalFormat("#0.00");
@@ -36,7 +36,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
     public void updateRoadObjects(RoadObjects roadObjects) {
         this.roadObjects = roadObjects;
         this.vehicles = roadObjects.getVehicles();
-        this.stopLights = roadObjects.getStopLights();
+        this.stopLightsList = roadObjects.getStopLights();
         this.uniqueRoads = this.vehicles.stream().map(Vehicle::getRoad).filter(distinctByKey(Road::getId)).collect(Collectors.toList());
         repaint();
     }
@@ -55,19 +55,19 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             g2.drawString("Elapsed time: " + decimalFormatter.format(roadObjects.getElapsedTime()), 20, -MainFrame.FRAME_HEIGHT / 2 + 20);
         }
 
-        if (stopLights != null) {
-            int lightPosition = stopLights.getRoad().getId() * roadWidth-10;
+        for (StopLights stopLights : stopLightsList) {
+            int lightPosition = stopLights.getRoad().getId() * roadWidth - 10;
             g2.setColor(stopLights.getColor());
             g2.fillRect((int) stopLights.getDistance(), lightPosition, 20, 10);
             int ovalDiameter = stopLights.getNotifyRadius();
-            g2.fillRect((int) stopLights.getDistance() - ovalDiameter / 2, lightPosition+4, 3, 26);
+            g2.fillRect((int) stopLights.getDistance() - ovalDiameter / 2, lightPosition + 4, 3, 26);
             g2.setColor(Color.BLACK);
         }
 
         for (Road road : uniqueRoads) {
             int topRoadLine = road.getId() * roadWidth;
             int bottomRoadLine = road.getId() * roadWidth + roadWidth;
-            g2.drawLine(0, topRoadLine , MainFrame.FRAME_WIDTH, topRoadLine );
+            g2.drawLine(0, topRoadLine, MainFrame.FRAME_WIDTH, topRoadLine);
             g2.drawLine(0, bottomRoadLine, MainFrame.FRAME_WIDTH, bottomRoadLine);
         }
 
@@ -78,13 +78,13 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             g2.fillRect((int) vehicle.getDistance(), carPositionY, (int) vehicle.getLength(), carHeight);
             g2.setColor(Color.BLACK);
             //+ "/" + (int) vehicle.getSpeed()
-            g2.drawString("" + vehicle.getId(), (int) vehicle.getDistance(), carPositionY+carHeight+14 );
+            g2.drawString("" + vehicle.getId(), (int) vehicle.getDistance(), carPositionY + carHeight + 14);
         }
 
     }
 
     private int getCarPositionY(int roadWidth, int carHeight, Vehicle vehicle) {
-        return (vehicle.getRoad().getId() * roadWidth) + (roadWidth-carHeight)/2;
+        return (vehicle.getRoad().getId() * roadWidth) + (roadWidth - carHeight) / 2;
     }
 
     private Color getRedGreenScaledColor(double speed, double desiredSpeed) {
@@ -101,7 +101,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }

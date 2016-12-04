@@ -1,7 +1,9 @@
 package pl.zablocki.core.roadnetwork;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 public class Road {
 
     @Getter

@@ -12,6 +12,8 @@ import pl.zablocki.core.vehicle.VehicleData;
 public class Scenario {
 
     @Getter
+    private final int id;
+    @Getter
     private final double carsPerHour;
     @Getter
     private final double simulationDuration;

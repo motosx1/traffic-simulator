@@ -1,27 +1,34 @@
 package pl.zablocki.core.simulation;
 
+import pl.zablocki.core.roadnetwork.Road;
 import pl.zablocki.core.roadnetwork.StopLightsEngine;
 import pl.zablocki.core.vehicle.StopLights;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Simulation {
 
     private RoadObjects roadObjects = new RoadObjects();
-    private List<Vehicle> activeVehicles = new ArrayList<>();
-    private Scenario scenario;
+//    private List<Vehicle> activeVehicles = new ArrayList<>();
+    private Map<Integer, List<Vehicle>> activeVehicles = new HashMap<>();
+    private Scenarios scenarios;
 
-    public Simulation(Scenario scenario) {
-        this.scenario = scenario;
+    public Simulation(Scenarios scenarios) {
+        this.scenarios = scenarios;
+        scenarios.getScenarios().forEach(scenario -> {
+            activeVehicles.put(scenario.getId(), new ArrayList<>());
+        });
     }
 
-    private void createNewVehicles() {
-        Vehicle newVehicle = VehicleFactory.createNewVehicle(scenario, activeVehicles);
-        activeVehicles.add(newVehicle);
+    private void createNewVehicles(Scenario scenario) {
+        Vehicle newVehicle = VehicleFactory.createNewVehicle(scenario, activeVehicles.get(scenario.getId()));
+        activeVehicles.get(scenario.getId()).add(newVehicle);
     }
 
     private void deleteNotActiveVehicles() {
@@ -29,43 +36,51 @@ public class Simulation {
     }
 
     RoadObjects doStep(double dt, double elapsedTime) {
-        StopLights stopLight = scenario.getStopLights();
+        List<StopLights> stopLightsList = new ArrayList<>();
+        for (Scenario scenario : scenarios.getScenarios()) {
 
-        StopLightsEngine.changeLight(stopLight, dt, elapsedTime);
+            StopLights stopLight = scenario.getStopLights();
 
-        activeVehicles.forEach(vehicle -> {
-            vehicle.updateParameters(dt);
+            StopLightsEngine.changeLight(stopLight, dt, elapsedTime);
 
-            if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
-                vehicle.setStopLights(stopLight);
-                stopLight.setBroadcastingRed(false);
-            }
+            activeVehicles.get(scenario.getId()).forEach(vehicle -> {
+                vehicle.updateParameters(dt);
 
-            if (stopLight.isBroadcastingGreen()) {
-                if (vehicle.getStopLights() != null && vehicle.getStopLights().equals(stopLight)) {
-                    vehicle.setStopLights(null);
-                    vehicle.updateParameters(dt);
+                if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
+                    vehicle.setStopLights(stopLight);
+                    stopLight.setBroadcastingRed(false);
+                }
+
+                if (stopLight.isBroadcastingGreen()) {
+                    if (vehicle.getStopLights() != null && vehicle.getStopLights().equals(stopLight)) {
+                        vehicle.setStopLights(null);
+                        vehicle.updateParameters(dt);
+                    }
+                }
+            });
+
+
+            if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
+                if (isPossibleToCreateNewVehicles(scenario.getTypicalVehicle().getPosition().getCurrentRoad(), scenario.getId())) {
+                    createNewVehicles(scenario);
                 }
             }
-        });
 
+            stopLightsList.add(stopLight);
 
-        if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
-            if (isPossibleToCreateNewVehicles()) {
-                createNewVehicles();
-            }
+            deleteNotActiveVehicles();
         }
 
-        deleteNotActiveVehicles();
-
-        roadObjects.setVehicles(activeVehicles);
-        roadObjects.setStopLights(scenario.getStopLights());
+        List<Vehicle> vehicles = new ArrayList<>();
+        activeVehicles.entrySet().forEach(entry -> entry.getValue().forEach(vehicles::add));
+        roadObjects.setVehicles(vehicles);
+        roadObjects.setStopLights(stopLightsList);
         return roadObjects;
     }
 
-    private boolean isPossibleToCreateNewVehicles() {
-        List<Vehicle> vehiclesAtStart = activeVehicles.stream()
-                .filter(v -> v.getDistance() < v.getLength())
+    private boolean isPossibleToCreateNewVehicles(Road currentRoad, int roadId) {
+        List<Vehicle> vehiclesAtStart = activeVehicles.get(roadId).stream()
+                .filter(v -> (v.getRoad().getId() == currentRoad.getId()) && (v.getDistance() < v.getLength()))
                 .collect(Collectors.toList());
         return vehiclesAtStart.size() == 0;
     }
