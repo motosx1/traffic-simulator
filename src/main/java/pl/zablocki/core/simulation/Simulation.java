@@ -78,9 +78,9 @@ public class Simulation {
         return roadObjects;
     }
 
-    private boolean isPossibleToCreateNewVehicles(Road currentRoad, int roadId) {
-        List<Vehicle> vehiclesAtStart = activeVehicles.get(roadId).stream()
-                .filter(v -> (v.getRoad().getId() == currentRoad.getId()) && (v.getDistance() < v.getLength()))
+    private boolean isPossibleToCreateNewVehicles(Road currentRoad, int scenarioId) {
+        List<Vehicle> vehiclesAtStart = activeVehicles.get(scenarioId).stream()
+                .filter(v -> (v.getRoad().getId() == currentRoad.getId()) && (v.getDistance() >= 0) && (v.getDistance() < v.getLength() + 10))
                 .collect(Collectors.toList());
         return vehiclesAtStart.size() == 0;
     }

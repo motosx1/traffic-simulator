@@ -22,6 +22,9 @@ public class VehicleParams {
     @Setter
     @Getter
     private double speed = 30;
+    @Setter
+    @Getter
+    private double bParam = 50;
 
     public VehicleParams() {
     }
@@ -31,5 +34,6 @@ public class VehicleParams {
         this.desiredSpeed = params.getDesiredSpeed();
         this.length = params.getLength();
         this.speed = params.getSpeed();
+        this.bParam = params.getBParam();
     }
 }

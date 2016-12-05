@@ -26,8 +26,8 @@ public class StopLights {
     public StopLights(Road road) {
         this.road = road;
         position = new Position(null, 1600);
-        greenLightTimeSec = 20;
-        redLightTimeSec = 20;
+        greenLightTimeSec = 40;
+        redLightTimeSec = 10;
     }
 
 

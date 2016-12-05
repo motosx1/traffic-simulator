@@ -8,6 +8,7 @@ public class VehicleData {
 
     @Getter
     Position position = new Position();
+    @Getter
     VehicleParams params = new VehicleParams();
 
     public VehicleData() {

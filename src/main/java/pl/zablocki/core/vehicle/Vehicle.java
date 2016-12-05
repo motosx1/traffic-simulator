@@ -57,7 +57,7 @@ public class Vehicle {
 
         double s1 = 0;
         double delta = 4;
-        double b = 50;  // im wieksze tym ostrzejsze hamowanie :)
+        double b = getParams().getBParam();  // im wieksze tym ostrzejsze hamowanie :)
         double coolness = 1;
 
 
