@@ -45,29 +45,12 @@ public class Simulation {
 
             activeVehicles.get(scenario.getId()).forEach(vehicle -> {
                 vehicle.updateParameters(dt);
-
-                if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
-                    vehicle.setStopLights(stopLight);
-                    stopLight.setBroadcastingRed(false);
-                }
-
-                if (stopLight.isBroadcastingGreen()) {
-                    if (vehicle.getStopLights() != null && vehicle.getStopLights().equals(stopLight)) {
-                        vehicle.setStopLights(null);
-                        vehicle.updateParameters(dt);
-                    }
-                }
+                assignStopLightToVehicle(dt, stopLight, vehicle);
             });
 
 
-            if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
-                if (isPossibleToCreateNewVehicles(scenario.getTypicalVehicle().getPosition().getCurrentRoad(), scenario.getId())) {
-                    createNewVehicles(scenario);
-                }
-            }
-
+            createAndAddnewVehicles(dt, elapsedTime, scenario);
             stopLightsList.add(stopLight);
-
             deleteNotActiveVehicles();
         }
 
@@ -76,6 +59,28 @@ public class Simulation {
         roadObjects.setVehicles(vehicles);
         roadObjects.setStopLights(stopLightsList);
         return roadObjects;
+    }
+
+    private void assignStopLightToVehicle(double dt, StopLights stopLight, Vehicle vehicle) {
+        if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
+            vehicle.setStopLights(stopLight);
+            stopLight.setBroadcastingRed(false);
+        }
+
+        if (stopLight.isBroadcastingGreen()) {
+            if (vehicle.getStopLights() != null && vehicle.getStopLights().equals(stopLight)) {
+                vehicle.setStopLights(null);
+                vehicle.updateParameters(dt);
+            }
+        }
+    }
+
+    private void createAndAddnewVehicles(double dt, double elapsedTime, Scenario scenario) {
+        if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
+            if (isPossibleToCreateNewVehicles(scenario.getTypicalVehicle().getPosition().getCurrentRoad(), scenario.getId())) {
+                createNewVehicles(scenario);
+            }
+        }
     }
 
     private boolean isPossibleToCreateNewVehicles(Road currentRoad, int scenarioId) {

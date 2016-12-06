@@ -33,26 +33,27 @@ public class AppViewer {
 
     private Scenarios loadScenarios() {
         //TODO init with xml
-        Road road = new Road(0);
-        Position position = new Position(road, 0);
-        VehicleData typicalVehicle = new VehicleData(position);
-        typicalVehicle.getParams().setBParam(35);
-        StopLights stopLights = new StopLights(road);
-        Scenario scenario1 = new Scenario(0, 2000, 100 * 60, typicalVehicle, stopLights);
+        Scenario scenario1 = createNewScenario(0, 35);
+        Scenario scenario3 = createNewScenario(1, 35);
+        Scenario scenario2 = createNewScenario(10, 1);
 
-        Road road2 = new Road(10);
-        Position position2 = new Position(road2, 0);
-        VehicleData typicalVehicle2 = new VehicleData(position2);
-        typicalVehicle2.getParams().setBParam(1);
-        StopLights stopLights2 = new StopLights(road2);
-        Scenario scenario2 = new Scenario(1, 2000, 100 * 60, typicalVehicle2, stopLights2);
 
         Scenarios scenarios = new Scenarios();
         scenarios.setSimulationDuration(100 * 60);
         scenarios.getScenarios().add(scenario1);
         scenarios.getScenarios().add(scenario2);
+        scenarios.getScenarios().add(scenario3);
 
         return scenarios;
+    }
+
+    private Scenario createNewScenario(int roadId, int bParam) {
+        Road road = new Road(roadId);
+        Position position = new Position(road, 0);
+        VehicleData typicalVehicle = new VehicleData(position);
+        typicalVehicle.getParams().setBParam(bParam);
+        StopLights stopLights = new StopLights(road);
+        return new Scenario(2000, 100 * 60, typicalVehicle, stopLights);
     }
 
     private void initFrame() {
