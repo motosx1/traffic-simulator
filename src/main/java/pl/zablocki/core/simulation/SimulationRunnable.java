@@ -1,6 +1,6 @@
 package pl.zablocki.core.simulation;
 
-import pl.zablocki.core.longitudinalmodel.ParamsSingleton;
+import pl.zablocki.core.model.ParamsSingleton;
 import pl.zablocki.core.vehicle.VehicleDataListener;
 import pl.zablocki.viewer.panels.CanvasPanel;
 import pl.zablocki.viewer.panels.MainFrame;

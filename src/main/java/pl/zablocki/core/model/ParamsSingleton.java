@@ -1,4 +1,4 @@
-package pl.zablocki.core.longitudinalmodel;
+package pl.zablocki.core.model;
 
 
 import lombok.Getter;
