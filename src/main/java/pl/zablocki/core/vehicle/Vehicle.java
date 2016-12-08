@@ -7,20 +7,22 @@ import pl.zablocki.core.model.AccelerationModel;
 import pl.zablocki.core.model.GippsModel;
 import pl.zablocki.core.road.RoadObject;
 
+import java.util.List;
+
 @ToString
 public class Vehicle extends RoadObject {
 
     @Getter
     private Integer id;
     @Setter
-    private Vehicle vehicleInFront;
+    private RoadObject objectInFront;
     @Setter
     @Getter
     private AccelerationModel accelerationModel;
 
-    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle vehicleInFront) {
+    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
         this.id = id;
-        this.vehicleInFront = vehicleInFront; //reference
+        this.objectInFront = objectInFront;
         this.accelerationModel = new GippsModel();
         setVehicleParams(vehicleParams);
     }
@@ -67,19 +69,19 @@ public class Vehicle extends RoadObject {
     }
 
     private double getRelativeSpeed() {
-        if (vehicleInFront != null) {
-            return getSpeed() - vehicleInFront.getSpeed();
+        if (objectInFront != null) {
+            return getSpeed() - objectInFront.getSpeed();
         }
         return 0;
     }
 
     private double getObjectsInFrontAcc() {
-        return vehicleInFront == null ? getAcceleration() : vehicleInFront.getAcceleration();
+        return objectInFront == null ? getAcceleration() : objectInFront.getAcceleration();
     }
 
     private double getDistanceToFrontObject() {
-        if (vehicleInFront != null) {
-            return Math.abs(vehicleInFront.getPosition() - this.getPosition()) - vehicleInFront.getLength();
+        if (objectInFront != null) {
+            return Math.abs(objectInFront.getPosition() - this.getPosition()) - objectInFront.getLength();
         }
         return 10000;
     }
@@ -88,8 +90,14 @@ public class Vehicle extends RoadObject {
         return 2;
     }
 
-    public Vehicle getVehicleInFront() {
-        return vehicleInFront != null ? vehicleInFront : null;
+    public RoadObject getObjectInFront() {
+        return objectInFront != null ? objectInFront : null;
     }
 
+    public Vehicle findVehicleInFront(List<Vehicle> vehiclesInTheLine) {
+        return vehiclesInTheLine.stream()
+                .filter(vehicle -> vehicle.getPosition() > this.getPosition())
+                .min((o1, o2) -> (int) (o1.getPosition() - o2.getPosition()))
+                .orElse(null);
+    }
 }

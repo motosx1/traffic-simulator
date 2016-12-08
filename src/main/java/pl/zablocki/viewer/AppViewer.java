@@ -6,6 +6,7 @@ import pl.zablocki.core.road.RoadObject;
 import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
+import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.viewer.panels.MainFrame;
 
 import java.util.ArrayList;
@@ -49,11 +50,17 @@ public class AppViewer {
 
     private Scenario createNewScenario(int roadId, int bParam) {
 
+        StopLight stopLight1 = new StopLight(1600);
+        StopLight stopLight2 = new StopLight(1600);
         Line line1 = new Line(0);
         Line line2 = new Line(1);
+        line1.setStopLight(stopLight1);
+        line2.setStopLight(stopLight2);
+
         List<Line> lines = new ArrayList<>();
         lines.add(line1);
         lines.add(line2);
+
 
         RoadObject typicalVehicleData = new RoadObject();
         typicalVehicleData.setAcceleration(2.2);

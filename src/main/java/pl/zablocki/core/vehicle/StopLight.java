@@ -20,26 +20,45 @@ public class StopLight extends RoadObject{
     @Getter
     private int redLightTimeSec;
 
-    public StopLight() {
-        greenLightTimeSec = 40;
+    public StopLight(double position) {
+        greenLightTimeSec = 10;
         redLightTimeSec = 10;
-        setPosition(1600);
+        setPosition(position);
     }
 
+    public boolean isVehicleInRange(Vehicle vehicle) {
+        double notificationPoint = getPosition() - getNotifyRadius();
+        double vehicleDistance = vehicle.getPosition();
+        return notificationPoint >= vehicleDistance && notificationPoint - vehicleDistance < vehicle.getSpeed();
+    }
 
-    public boolean isRed() {
+    public void changeLight(double dt, double elapsedTime) {
+        boolean hasChanged = false;
+
+        if (isRed() && (elapsedTime % getRedLightTimeSec() < dt)) {
+            setGreen();
+            setBroadcastingGreen(true);
+            hasChanged = true;
+        }
+        if (!hasChanged && isGreen() && (elapsedTime % getGreenLightTimeSec() < dt)) {
+            setRed();
+            setBroadcastingRed(true);
+        }
+    }
+
+    private boolean isRed() {
         return color == Color.RED;
     }
 
-    public boolean isGreen() {
+    private boolean isGreen() {
         return color == Color.GREEN;
     }
 
-    public void setRed() {
+    private void setRed() {
         this.color = Color.RED;
     }
 
-    public void setGreen() {
+    private void setGreen() {
         this.color = Color.GREEN;
     }
 
@@ -48,7 +67,7 @@ public class StopLight extends RoadObject{
         broadcastingGreen = false;
     }
 
-    public void setBroadcastingGreen(boolean broadcastingGreen) {
+    private void setBroadcastingGreen(boolean broadcastingGreen) {
         this.broadcastingGreen = broadcastingGreen;
         broadcastingRed = false;
     }

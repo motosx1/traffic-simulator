@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.zablocki.core.road.Road;
 import pl.zablocki.core.road.RoadObject;
-import pl.zablocki.core.vehicle.StopLight;
 
 @ToString
 public class Scenario {
@@ -17,8 +16,6 @@ public class Scenario {
     private double carsPerHour;
     @Getter @Setter
     private RoadObject typicalVehicle;
-    @Getter @Setter
-    private StopLight stopLight;
     @Getter @Setter
     private Road road;
 

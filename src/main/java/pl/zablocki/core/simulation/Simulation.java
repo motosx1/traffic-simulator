@@ -2,19 +2,19 @@ package pl.zablocki.core.simulation;
 
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
+import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleFactory;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Simulation {
+class Simulation {
 
     private Scenarios scenarios;
 
-    public Simulation(Scenarios scenarios) {
+    Simulation(Scenarios scenarios) {
         this.scenarios = scenarios;
     }
 
@@ -26,8 +26,12 @@ public class Simulation {
         for (Scenario scenario : scenarios.getScenarios()) {
             Road road = scenario.getRoad();
 
+
             for (Line line : road.getLines()) {
                 List<Vehicle> vehiclesInTheLine = line.getVehicles();
+                StopLight stopLight = line.getStopLight();
+
+                changeLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
 
                 for (Vehicle vehicle : vehiclesInTheLine) {
                     vehicle.updateParameters(dt);
@@ -45,6 +49,48 @@ public class Simulation {
         List<Road> roads = scenarios.getScenarios().stream().map(Scenario::getRoad).collect(Collectors.toList());
         roadData.getRoads().addAll(roads);
         return roadData;
+    }
+
+    private void changeLight(double dt, double elapsedTime, List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        stopLight.changeLight(dt, elapsedTime);
+        checkBroadcastingRed(vehiclesInTheLine, stopLight);
+        checkBroadcastingGreen(vehiclesInTheLine, stopLight);
+    }
+
+    private void checkBroadcastingGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        if (stopLight.isBroadcastingGreen()) {
+            assignGreen(vehiclesInTheLine, stopLight);
+        }
+    }
+
+    private void assignGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        boolean found = false;
+        for (Vehicle vehicle : vehiclesInTheLine) {
+            if (!found) {
+                RoadObject objectInFront = vehicle.getObjectInFront();
+                if (objectInFront != null) {
+                    if (objectInFront.equals(stopLight)) {
+                        vehicle.setObjectInFront(vehicle.findVehicleInFront(vehiclesInTheLine));
+                        found = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkBroadcastingRed(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        for (Vehicle vehicle : vehiclesInTheLine) {
+            if (stopLight.isBroadcastingRed()) {
+                assignRed(stopLight, vehicle);
+            }
+        }
+    }
+
+    private void assignRed(StopLight stopLight, Vehicle vehicle) {
+        if (stopLight.isVehicleInRange(vehicle)) {
+            vehicle.setObjectInFront(stopLight);
+            stopLight.setBroadcastingRed(false);
+        }
     }
 
     private Vehicle createNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line) {
