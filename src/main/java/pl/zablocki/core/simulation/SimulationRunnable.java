@@ -13,7 +13,7 @@ public class SimulationRunnable implements Runnable {
     private Scenarios scenarios;
     private MainFrame mainFrame;
     private Simulation simulation;
-    private List<VehicleDataListener> listeners = new ArrayList<VehicleDataListener>();
+    private List<VehicleDataListener> listeners = new ArrayList<>();
     private ParamsSingleton params = ParamsSingleton.getInstance();
 
 
@@ -27,9 +27,9 @@ public class SimulationRunnable implements Runnable {
         double elapsedTime = 0;
 
         while (elapsedTime < scenarios.getSimulationDuration()) {
-            RoadObjects roadObjects = simulation.doStep(dt, elapsedTime);
-            roadObjects.setElapsedTime(elapsedTime);
-            notifyListeners(roadObjects);
+            RoadData roadData = simulation.doStep(dt, elapsedTime);
+            roadData.setElapsedTime(elapsedTime);
+            notifyListeners(roadData);
             sleep();
             elapsedTime += dt;
         }
@@ -43,9 +43,9 @@ public class SimulationRunnable implements Runnable {
         return mainFrame.getCanvas();
     }
 
-    private void notifyListeners(RoadObjects roadObjects) {
+    private void notifyListeners(RoadData roadData) {
         listeners.forEach(listener ->
-                listener.updateRoadObjects(roadObjects)
+                listener.updateRoadObjects(roadData)
         );
     }
 

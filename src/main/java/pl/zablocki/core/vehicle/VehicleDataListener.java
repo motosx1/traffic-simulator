@@ -1,9 +1,7 @@
 package pl.zablocki.core.vehicle;
 
-import pl.zablocki.core.simulation.RoadObjects;
-
-import java.util.List;
+import pl.zablocki.core.simulation.RoadData;
 
 public interface VehicleDataListener {
-    public void updateRoadObjects(RoadObjects roadObjects);
+    void updateRoadObjects(RoadData roadData);
 }
