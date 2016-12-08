@@ -27,7 +27,7 @@ public class Vehicle extends RoadObject {
         this.objectInFront = objectInFront;
         this.accelerationModel = new GippsModel();
         setVehicleParams(vehicleParams);
-        this.type = type;
+        this.type = type == null ? VehicleType.NORMAL : type;
     }
 
     private void setVehicleParams(RoadObject vehicleParams) {
@@ -36,6 +36,7 @@ public class Vehicle extends RoadObject {
         setSpeed(vehicleParams.getSpeed());
         setMaxSpeed(vehicleParams.getMaxSpeed());
         setBreakingRappidness(vehicleParams.getBreakingRappidness());
+        setPosition(vehicleParams.getPosition());
     }
 
     public void updateParameters(double timeElapsed) {

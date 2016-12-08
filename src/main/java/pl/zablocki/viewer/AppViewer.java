@@ -7,6 +7,7 @@ import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
 import pl.zablocki.core.vehicle.StopLight;
+import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.viewer.panels.MainFrame;
 
 import java.util.ArrayList;
@@ -61,6 +62,12 @@ public class AppViewer {
         lines.add(line1);
         lines.add(line2);
 
+        // standing obstacle
+        RoadObject standingObstacle = new RoadObject();
+        standingObstacle.setPosition(1200);
+        standingObstacle.setMaxSpeed(0);
+        standingObstacle.setSpeed(0);
+        line2.getVehicles().add(new Vehicle(0, standingObstacle, null, null));
 
         RoadObject typicalVehicleData = new RoadObject();
         typicalVehicleData.setAcceleration(2.2);
