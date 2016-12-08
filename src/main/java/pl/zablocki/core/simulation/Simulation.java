@@ -52,9 +52,11 @@ class Simulation {
     }
 
     private void changeLight(double dt, double elapsedTime, List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
-        stopLight.changeLight(dt, elapsedTime);
-        checkBroadcastingRed(vehiclesInTheLine, stopLight);
-        checkBroadcastingGreen(vehiclesInTheLine, stopLight);
+        if (stopLight != null) {
+            stopLight.changeLight(dt, elapsedTime);
+            checkBroadcastingRed(vehiclesInTheLine, stopLight);
+            checkBroadcastingGreen(vehiclesInTheLine, stopLight);
+        }
     }
 
     private void checkBroadcastingGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
