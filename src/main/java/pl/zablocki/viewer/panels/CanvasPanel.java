@@ -1,8 +1,8 @@
 package pl.zablocki.viewer.panels;
 
-import pl.zablocki.core.roadnetwork.Road;
-import pl.zablocki.core.simulation.RoadObjects;
-import pl.zablocki.core.vehicle.StopLights;
+import pl.zablocki.core.road.Line;
+import pl.zablocki.core.simulation.RoadData;
+import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
 
@@ -11,21 +11,16 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class CanvasPanel extends JPanel implements VehicleDataListener {
 
-    private List<Vehicle> vehicles = new ArrayList<>();
-    private List<StopLights> stopLightsList = new ArrayList<>();
-    private RoadObjects roadObjects;
-    private List<Road> uniqueRoads = new ArrayList<>();
-    NumberFormat decimalFormatter = new DecimalFormat("#0.00");
+    private RoadData roadData;
+    private NumberFormat decimalFormatter = new DecimalFormat("#0.00");
+    private int distanceBetweenRoads = 30;
 
     CanvasPanel() {
         super();
@@ -33,11 +28,8 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         repaint();
     }
 
-    public void updateRoadObjects(RoadObjects roadObjects) {
-        this.roadObjects = roadObjects;
-        this.vehicles = roadObjects.getVehicles();
-        this.stopLightsList = roadObjects.getStopLights();
-        this.uniqueRoads = this.vehicles.stream().map(Vehicle::getRoad).filter(distinctByKey(Road::getId)).collect(Collectors.toList());
+    public void updateRoadObjects(RoadData roadData) {
+        this.roadData = roadData;
         repaint();
     }
 
@@ -46,45 +38,64 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
     public void paint(Graphics g) {
         super.paint(g);
         int roadWidth = 14;
-        int carHeight = 10;
 
         Graphics2D g2 = (Graphics2D) g;
         setCanvasCenter(g2);
 
-        if (roadObjects != null) {
-            g2.drawString("Elapsed time: " + decimalFormatter.format(roadObjects.getElapsedTime()), 20, -MainFrame.FRAME_HEIGHT / 2 + 20);
+        if (roadData == null) {
+            return;
         }
 
-        for (StopLights stopLights : stopLightsList) {
-            int lightPosition = stopLights.getRoad().getId() * roadWidth - 10;
-            g2.setColor(stopLights.getColor());
-            g2.fillRect((int) stopLights.getDistance(), lightPosition, 20, 10);
-            int ovalDiameter = stopLights.getNotifyRadius();
-            g2.fillRect((int) stopLights.getDistance() - ovalDiameter / 2, lightPosition + 4, 3, 26);
-            g2.setColor(Color.BLACK);
-        }
+        g2.drawString("Elapsed time: " + decimalFormatter.format(roadData.getElapsedTime()), 20, -180);
 
-        for (Road road : uniqueRoads) {
-            int topRoadLine = road.getId() * roadWidth;
-            int bottomRoadLine = road.getId() * roadWidth + roadWidth;
-            g2.drawLine(0, topRoadLine, MainFrame.FRAME_WIDTH, topRoadLine);
-            g2.drawLine(0, bottomRoadLine, MainFrame.FRAME_WIDTH, bottomRoadLine);
-        }
+        roadData.getRoads().forEach(road -> {
+            drawStopLight(road.getStopLight(), road.getId(), g2);
+            road.getLines().forEach(line -> {
+                drawLine(line, roadWidth, road.getId(), g2);
+                line.getVehicles().forEach(vehicle ->
+                    drawVehicle(vehicle, road.getId(), line.getId(), roadWidth, g2)
+                );
+            });
+        });
 
-        for (Vehicle vehicle : vehicles) {
-            Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getDesiredSpeed());
+
+    }
+
+    private void drawVehicle(Vehicle vehicle, int roadId, int lineId, int roadWidth, Graphics2D g2) {
+        if (vehicle != null) {
+            int carHeight = 10;
+            Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getMaxSpeed());
             g2.setColor(color);
-            int carPositionY = getCarPositionY(roadWidth, carHeight, vehicle);
-            g2.fillRect((int) vehicle.getDistance(), carPositionY, (int) vehicle.getLength(), carHeight);
+            int carPositionY = getCarPositionY(roadWidth, carHeight, roadId, lineId);
+            double position = vehicle.getPosition();
+            g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
             g2.setColor(Color.BLACK);
-            //+ "/" + (int) vehicle.getSpeed()
-            g2.drawString("" + vehicle.getId(), (int) vehicle.getDistance(), carPositionY + carHeight + 14);
+            //+ "/" + decimalFormatter.format(vehicle.getSpeed())
+            g2.drawString("" + vehicle.getId(), (int) position, carPositionY + 10);
         }
 
     }
 
-    private int getCarPositionY(int roadWidth, int carHeight, Vehicle vehicle) {
-        return (vehicle.getRoad().getId() * roadWidth) + (roadWidth - carHeight) / 2;
+    private void drawStopLight(StopLight stopLight, int roadId, Graphics2D g2) {
+        if (stopLight != null) {
+            int lightPosition = roadId * distanceBetweenRoads - 10;
+            g2.setColor(stopLight.getColor());
+            g2.fillRect((int) stopLight.getPosition(), lightPosition, 20, 10);
+            int ovalDiameter = stopLight.getNotifyRadius();
+            g2.fillRect((int) stopLight.getPosition() - ovalDiameter / 2, lightPosition + 4, 3, 26);
+        }
+    }
+
+    private void drawLine(Line line, int roadWidth, int roadId, Graphics2D g2) {
+        g2.setColor(Color.BLACK);
+        int topRoadLine = roadId * distanceBetweenRoads + line.getId() * roadWidth;
+        int bottomRoadLine = roadId * distanceBetweenRoads + line.getId() * roadWidth + roadWidth;
+        g2.drawLine(0, topRoadLine, MainFrame.FRAME_WIDTH, topRoadLine);
+        g2.drawLine(0, bottomRoadLine, MainFrame.FRAME_WIDTH, bottomRoadLine);
+    }
+
+    private int getCarPositionY(int roadWidth, int carHeight, int roadId, int lineId) {
+        return (roadId * distanceBetweenRoads + lineId * roadWidth) + (roadWidth - carHeight) / 2;
     }
 
     private Color getRedGreenScaledColor(double speed, double desiredSpeed) {
@@ -96,7 +107,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     private void setCanvasCenter(Graphics2D g2) {
         AffineTransform tx = new AffineTransform();
-        tx.translate(20, MainFrame.getCanvasPanelSize().getHeight() / (double) 2);
+        tx.translate(20, 200);//MainFrame.getCanvasPanelSize().getHeight() / (double) 4);
         g2.setTransform(tx);
     }
 

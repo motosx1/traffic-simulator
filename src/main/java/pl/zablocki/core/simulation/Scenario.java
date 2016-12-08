@@ -2,29 +2,27 @@ package pl.zablocki.core.simulation;
 
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
-import pl.zablocki.core.vehicle.StopLights;
-import pl.zablocki.core.vehicle.VehicleData;
+import pl.zablocki.core.road.Road;
+import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.vehicle.StopLight;
 
 @ToString
 public class Scenario {
-    public static int idCounter = 0;
+    private static int idCounter = 0;
     @Getter
     private final int id;
-    @Getter
-    private final double carsPerHour;
-    @Getter
-    private final double simulationDuration;
-    @Getter
-    private final VehicleData typicalVehicle;
-    @Getter
-    private final StopLights stopLights;
+    @Getter @Setter
+    private double carsPerHour;
+    @Getter @Setter
+    private RoadObject typicalVehicle;
+    @Getter @Setter
+    private StopLight stopLight;
+    @Getter @Setter
+    private Road road;
 
-    public Scenario(double carsPerHour, double simulationDuration, VehicleData typicalVehicle, StopLights stopLights) {
+    public Scenario() {
         this.id = idCounter++;
-        this.carsPerHour = carsPerHour;
-        this.simulationDuration = simulationDuration;
-        this.typicalVehicle = typicalVehicle;
-        this.stopLights = stopLights;
     }
 }

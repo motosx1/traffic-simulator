@@ -1,11 +1,11 @@
 package pl.zablocki.core.vehicle;
 
 import lombok.Getter;
-import pl.zablocki.core.roadnetwork.Road;
+import pl.zablocki.core.road.RoadObject;
 
 import java.awt.*;
 
-public class StopLights {
+public class StopLight extends RoadObject{
 
     @Getter
     private int notifyRadius = 100;
@@ -19,15 +19,11 @@ public class StopLights {
     private int greenLightTimeSec;
     @Getter
     private int redLightTimeSec;
-    private Position position;
-    @Getter
-    private Road road = new Road();
 
-    public StopLights(Road road) {
-        this.road = road;
-        position = new Position(null, 1600);
+    public StopLight() {
         greenLightTimeSec = 40;
         redLightTimeSec = 10;
+        setPosition(1600);
     }
 
 
@@ -57,35 +53,20 @@ public class StopLights {
         broadcastingRed = false;
     }
 
-    Position getPosition() {
-        return position;
-    }
-
-    void setPosition(Position position) {
-        this.position = position;
-    }
-
-    void setDistance(double pos) {
-        this.getPosition().setDistance(pos);
-    }
-
-    public double getDistance() {
-        return this.getPosition().getDistance();
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StopLights that = (StopLights) o;
+        StopLight that = (StopLight) o;
 
-        return position.equals(that.position);
+        return getPosition() == that.getPosition();
 
     }
 
     @Override
     public int hashCode() {
-        return position.hashCode();
+        return 0;
     }
 }
