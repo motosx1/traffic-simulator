@@ -26,21 +26,13 @@ class Simulation {
         for (Scenario scenario : scenarios.getScenarios()) {
             Road road = scenario.getRoad();
 
-
             for (Line line : road.getLines()) {
                 List<Vehicle> vehiclesInTheLine = line.getVehicles();
                 StopLight stopLight = line.getStopLight();
 
-                changeLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
-
-                for (Vehicle vehicle : vehiclesInTheLine) {
-                    vehicle.updateParameters(dt);
-                }
-
-                Vehicle newVehicle = createNewVehicle(dt, elapsedTime, scenario, line);
-                if (newVehicle != null) {
-                    line.getVehicles().add(newVehicle);
-                }
+                changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
+                updateVehiclesParameters(dt, vehiclesInTheLine);
+                createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line);
             }
 
         }
@@ -51,7 +43,13 @@ class Simulation {
         return roadData;
     }
 
-    private void changeLight(double dt, double elapsedTime, List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+    private void updateVehiclesParameters(double dt, List<Vehicle> vehiclesInTheLine) {
+        for (Vehicle vehicle : vehiclesInTheLine) {
+            vehicle.updateParameters(dt);
+        }
+    }
+
+    private void changeStopLight(double dt, double elapsedTime, List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
         if (stopLight != null) {
             stopLight.changeLight(dt, elapsedTime);
             checkBroadcastingRed(vehiclesInTheLine, stopLight);
@@ -95,13 +93,16 @@ class Simulation {
         }
     }
 
-    private Vehicle createNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line) {
+    private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line) {
+        Vehicle newVehicle = null;
         if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
             if (isPossibleToCreateNewVehicles(line.getVehicles())) {
-                return VehicleFactory.createNewVehicle(line.vehicleCounter++, line, scenario.getTypicalVehicle());
+                newVehicle = VehicleFactory.createNewVehicle(line.vehicleCounter++, line, scenario.getTypicalVehicle());
             }
         }
-        return null;
+        if (newVehicle != null) {
+            line.getVehicles().add(newVehicle);
+        }
     }
 
     private boolean isPossibleToCreateNewVehicles(List<Vehicle> vehiclesInTheLine) {
@@ -110,52 +111,6 @@ class Simulation {
                 .collect(Collectors.toList());
         return vehiclesAtStart.size() == 0;
     }
-
-//    private void getNewVehicle(double dt, double elapsedTime, Scenario scenario) {
-//        return VehicleFactory.createNewVehicle(scenario, activeVehicles.get(scenario.getId()));
-//        activeVehicles.get(scenario.getId()).add(newVehicle);
-//    }
-
-//    RoadData doStep(double dt, double elapsedTime) {
-//        List<StopLight> stopLightList = new ArrayList<>();
-//        for (Scenario scenario : scenarios.getScenarios()) {
-//
-//            StopLight stopLight = scenario.getStopLights();
-//
-//            StopLightsEngine.changeLight(stopLight, dt, elapsedTime);
-//
-//            activeVehicles.get(scenario.getId()).forEach(vehicle -> {
-//                vehicle.updateParameters(dt);
-//                assignStopLightToVehicle(dt, stopLight, vehicle);
-//            });
-//
-//
-//            getNewVehicle(dt, elapsedTime, scenario);
-//            stopLightList.add(stopLight);
-//            deleteNotActiveVehicles();
-//        }
-//
-//        List<Vehicle> vehicles = new ArrayList<>();
-//        activeVehicles.entrySet().forEach(entry -> entry.getValue().forEach(vehicles::add));
-//        roadData.setVehicles(vehicles);
-//        roadData.setStopLights(stopLightList);
-//        return roadData;
-//    }
-
-//    private void assignStopLightToVehicle(double dt, StopLight stopLight, Vehicle vehicle) {
-//        if (stopLight.isBroadcastingRed() && StopLightsEngine.isVehicleInRange(vehicle, stopLight)) {
-//            vehicle.setStopLights(stopLight);
-//            stopLight.setBroadcastingRed(false);
-//        }
-//
-//        if (stopLight.isBroadcastingGreen()) {
-//            if (vehicle.getStopLight() != null && vehicle.getStopLight().equals(stopLight)) {
-//                vehicle.setStopLights(null);
-//                vehicle.updateParameters(dt);
-//            }
-//        }
-//    }
-
 
     private boolean isTimeTo(double frequencyPerHour, double dt, double elapsedTime) {
         return elapsedTime % (3600 / frequencyPerHour) < dt;
