@@ -17,7 +17,7 @@ public class VehicleFactory {
     public static Vehicle createNewVehicle(int id, Line line, RoadObject roadObject) {
 //        int id = getNextId(scenario);
         Vehicle firstInList = findFirstVehicle(line.getVehicles());
-        return new Vehicle(id, roadObject, firstInList);
+        return new Vehicle(id, roadObject, firstInList, roadObject.getVehicleType() == null ? VehicleType.NORMAL : VehicleType.AUTONOMUS);
     }
 
     private static int getNextId(Scenario scenario) {

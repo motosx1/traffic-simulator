@@ -19,12 +19,15 @@ public class Vehicle extends RoadObject {
     @Setter
     @Getter
     private AccelerationModel accelerationModel;
+    @Getter
+    private final VehicleType type;
 
-    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
+    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront, VehicleType type) {
         this.id = id;
         this.objectInFront = objectInFront;
         this.accelerationModel = new GippsModel();
         setVehicleParams(vehicleParams);
+        this.type = type;
     }
 
     private void setVehicleParams(RoadObject vehicleParams) {
