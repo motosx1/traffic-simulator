@@ -16,9 +16,31 @@ public class Line {
     private List<Vehicle> vehicles = new ArrayList<>();
     @Getter
     @Setter
-    StopLight stopLight;
+    private StopLight stopLight;
+    @Getter
+    @Setter
+    private double carsPerHour;
 
     public Line(int id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Line line = (Line) o;
+
+        if (id != line.id) return false;
+        return stopLight != null ? stopLight.equals(line.stopLight) : line.stopLight == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (stopLight != null ? stopLight.hashCode() : 0);
+        return result;
     }
 }

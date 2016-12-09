@@ -8,6 +8,7 @@ import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
 import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
+import pl.zablocki.core.vehicle.ObjectType;
 import pl.zablocki.viewer.panels.MainFrame;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class AppViewer {
 
     private Scenarios loadScenarios() {
         //TODO init with xml
-        Scenario scenario1 = createNewScenario(0, 35);
-        Scenario scenario3 = createNewScenario(5, 1);
+        Scenario scenario1 = createNewScenario(0, 35, ObjectType.NORMAL);
+        Scenario scenario3 = createNewScenario(5, 1, ObjectType.AUTONOMUS);
 
 
         Scenarios scenarios = new Scenarios();
@@ -49,14 +50,18 @@ public class AppViewer {
         return scenarios;
     }
 
-    private Scenario createNewScenario(int roadId, int bParam) {
+    private Scenario createNewScenario(int roadId, int bParam, ObjectType type) {
 
         StopLight stopLight1 = new StopLight(1600);
         StopLight stopLight2 = new StopLight(1600);
+        stopLight1.setObjectType(ObjectType.STOPLIGHT);
+        stopLight2.setObjectType(ObjectType.STOPLIGHT);
         Line line1 = new Line(0);
         Line line2 = new Line(1);
         line1.setStopLight(stopLight1);
         line2.setStopLight(stopLight2);
+        line1.setCarsPerHour(500);
+        line2.setCarsPerHour(1500);
 
         List<Line> lines = new ArrayList<>();
         lines.add(line1);
@@ -67,14 +72,17 @@ public class AppViewer {
         standingObstacle.setPosition(1200);
         standingObstacle.setMaxSpeed(0);
         standingObstacle.setSpeed(0);
-        line2.getVehicles().add(new Vehicle(0, standingObstacle, null, null));
+        standingObstacle.setObjectType(ObjectType.OBSTACLE);
+        line2.getVehicles().add(new Vehicle(66, standingObstacle, null));
+        //
 
         RoadObject typicalVehicleData = new RoadObject();
         typicalVehicleData.setAcceleration(2.2);
         typicalVehicleData.setMaxAcceleration(2.2);
-        typicalVehicleData.setSpeed(30);
+        typicalVehicleData.setSpeed(20);
         typicalVehicleData.setMaxSpeed(30);
         typicalVehicleData.setBreakingRappidness(bParam);
+        typicalVehicleData.setObjectType(type);
 
         Road road = new Road(roadId);
         road.getLines().addAll(lines);

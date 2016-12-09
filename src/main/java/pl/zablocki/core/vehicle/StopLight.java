@@ -72,7 +72,6 @@ public class StopLight extends RoadObject{
         broadcastingRed = false;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,10 +81,5 @@ public class StopLight extends RoadObject{
 
         return getPosition() == that.getPosition();
 
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 }

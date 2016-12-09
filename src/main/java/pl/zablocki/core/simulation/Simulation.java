@@ -1,5 +1,6 @@
 package pl.zablocki.core.simulation;
 
+import pl.zablocki.core.model.LineChangeModel;
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
 import pl.zablocki.core.road.RoadObject;
@@ -31,6 +32,7 @@ class Simulation {
                 StopLight stopLight = line.getStopLight();
 
                 changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
+                decideToChangeLine(dt, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line);
             }
@@ -41,6 +43,10 @@ class Simulation {
         List<Road> roads = scenarios.getScenarios().stream().map(Scenario::getRoad).collect(Collectors.toList());
         roadData.getRoads().addAll(roads);
         return roadData;
+    }
+
+    private void decideToChangeLine(double dt, Road road) {
+        LineChangeModel.decideToChangeLine(dt, road);
     }
 
     private void updateVehiclesParameters(double dt, List<Vehicle> vehiclesInTheLine) {
@@ -95,7 +101,7 @@ class Simulation {
 
     private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line) {
         Vehicle newVehicle = null;
-        if (isTimeTo(scenario.getCarsPerHour(), dt, elapsedTime)) {
+        if (isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {
             if (isPossibleToCreateNewVehicles(line.getVehicles())) {
                 newVehicle = VehicleFactory.createNewVehicle(line.vehicleCounter++, line, scenario.getTypicalVehicle());
             }

@@ -2,7 +2,7 @@ package pl.zablocki.core.road;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.zablocki.core.vehicle.VehicleType;
+import pl.zablocki.core.vehicle.ObjectType;
 
 public class RoadObject {
     @Getter
@@ -28,5 +28,5 @@ public class RoadObject {
     private double breakingRappidness;
     @Getter
     @Setter
-    private VehicleType vehicleType;
+    private ObjectType objectType;
 }

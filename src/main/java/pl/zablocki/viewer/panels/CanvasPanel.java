@@ -1,6 +1,7 @@
 package pl.zablocki.viewer.panels;
 
 import pl.zablocki.core.simulation.RoadData;
+import pl.zablocki.core.vehicle.ObjectType;
 import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleDataListener;
@@ -64,8 +65,12 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
     private void drawVehicle(Vehicle vehicle, int roadId, int lineId, Graphics2D g2) {
         if (vehicle != null) {
             int carHeight = 10;
-            Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getMaxSpeed());
-            g2.setColor(color);
+            if( vehicle.getObjectType() == ObjectType.OBSTACLE ){
+                g2.setColor(Color.BLACK);
+            } else {
+                Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getMaxSpeed());
+                g2.setColor(color);
+            }
             int carPositionY = getCarPositionY(lineWidth, carHeight, roadId, lineId);
             double position = vehicle.getPosition();
             g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);

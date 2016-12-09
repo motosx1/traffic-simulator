@@ -5,9 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.zablocki.core.model.AccelerationModel;
 import pl.zablocki.core.model.GippsModel;
+import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.RoadObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ToString
 public class Vehicle extends RoadObject {
@@ -19,15 +22,12 @@ public class Vehicle extends RoadObject {
     @Setter
     @Getter
     private AccelerationModel accelerationModel;
-    @Getter
-    private final VehicleType type;
 
-    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront, VehicleType type) {
+    public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
         this.id = id;
         this.objectInFront = objectInFront;
         this.accelerationModel = new GippsModel();
         setVehicleParams(vehicleParams);
-        this.type = type == null ? VehicleType.NORMAL : type;
     }
 
     private void setVehicleParams(RoadObject vehicleParams) {
@@ -37,6 +37,7 @@ public class Vehicle extends RoadObject {
         setMaxSpeed(vehicleParams.getMaxSpeed());
         setBreakingRappidness(vehicleParams.getBreakingRappidness());
         setPosition(vehicleParams.getPosition());
+        setObjectType(vehicleParams.getObjectType() == null ? ObjectType.NORMAL : vehicleParams.getObjectType());
     }
 
     public void updateParameters(double timeElapsed) {
@@ -45,12 +46,12 @@ public class Vehicle extends RoadObject {
         double speed = getSpeed() + getAcceleration() * timeElapsed;
         speed = validateSpeed(speed);
         setSpeed(speed);
-        double newPosition =  getPosition() + (getSpeed() * timeElapsed) + (getAcceleration() * Math.sqrt(timeElapsed) * 0.5);
+        double newPosition = getPosition() + (getSpeed() * timeElapsed) + (getAcceleration() * Math.sqrt(timeElapsed) * 0.5);
         setPosition(newPosition);
     }
 
     private double calcAcc() {
-        double s = getDistanceToFrontObject();
+        double s = getDistanceToObject(getObjectInFront());
         double v = getSpeed();
         double dv = getRelativeSpeed();
         double accLead = getObjectsInFrontAcc();
@@ -83,7 +84,7 @@ public class Vehicle extends RoadObject {
         return objectInFront == null ? getAcceleration() : objectInFront.getAcceleration();
     }
 
-    private double getDistanceToFrontObject() {
+    private double getDistanceToObject(RoadObject objectInFront) {
         if (objectInFront != null) {
             return Math.abs(objectInFront.getPosition() - this.getPosition()) - objectInFront.getLength();
         }
@@ -104,4 +105,81 @@ public class Vehicle extends RoadObject {
                 .min((o1, o2) -> (int) (o1.getPosition() - o2.getPosition()))
                 .orElse(null);
     }
+
+    public Vehicle findVehicleBehind(List<Vehicle> vehiclesInTheLine) {
+        return vehiclesInTheLine.stream()
+                .filter(vehicle -> vehicle.getPosition() < this.getPosition())
+                .max((o1, o2) -> (int) (o1.getPosition() - o2.getPosition()))
+                .orElse(null);
+    }
+
+    public Line getBestAvailableLine(Line line, List<Line> availableLines) {
+        double currentAcc = simulateCalcAcc(line.getVehicles());
+        Map<Line, Double> lineAccDifferenceMap = new HashMap<>();
+        for (Line availableLine : availableLines) {
+            double accOnDifferentLine = simulateCalcAcc(availableLine.getVehicles());
+            double accDifference = accOnDifferentLine - currentAcc;
+            if (accDifferenceIsSufficient(accDifference) && canChangeToTheLine(availableLine)) {
+                lineAccDifferenceMap.put(availableLine, accDifference);
+            }
+        }
+
+//        Line bestLine = lineAccDifferenceMap.entrySet().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).orElse(null).getKey();
+        Map.Entry<Line, Double> bestLineEntry = lineAccDifferenceMap.entrySet().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).orElse(null);
+        Line bestLine = null;
+        if (bestLineEntry != null) {
+            bestLine = bestLineEntry.getKey();
+        }
+
+        return bestLine;
+    }
+
+    private boolean canChangeToTheLine(Line availableLine) {
+        Vehicle vehicleBehind = findVehicleBehind(availableLine.getVehicles());
+        Vehicle vehicleInFront = findVehicleInFront(availableLine.getVehicles());
+        if (getDistanceToObject(vehicleBehind) > getLength() * 1.2 && getDistanceToObject(vehicleInFront) > getLength() * 0.1) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private boolean accDifferenceIsSufficient(double accDifference) {
+        return accDifference > 0.6;
+    }
+
+    private double simulateCalcAcc(List<Vehicle> vehiclesInTheLine) {
+        Vehicle vehicleInFront = findVehicleInFront(vehiclesInTheLine);
+        double s = simulateGetDistanceToFrontObject(vehicleInFront);
+        double v = getSpeed();
+        double dv = simulateGetRelativeSpeed(vehicleInFront);
+        double accLead = simulateGetObjectsInFrontAcc(vehicleInFront);
+        double tLocal = 1;
+        double v0Local = getMaxSpeed();
+        double aLocal = getMaxAcceleration();
+
+        // actual Gipps formula
+        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRappidness(), getMinimumGap());
+
+    }
+
+
+    private double simulateGetDistanceToFrontObject(RoadObject object) {
+        if (object != null) {
+            return Math.abs(object.getPosition() - this.getPosition()) - object.getLength();
+        }
+        return 10000;
+    }
+
+    private double simulateGetRelativeSpeed(RoadObject object) {
+        if (object != null) {
+            return getSpeed() - object.getSpeed();
+        }
+        return 0;
+    }
+
+    private double simulateGetObjectsInFrontAcc(RoadObject object) {
+        return object == null ? getAcceleration() : object.getAcceleration();
+    }
+
 }
