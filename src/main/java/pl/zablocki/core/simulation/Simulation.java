@@ -34,7 +34,7 @@ class Simulation {
                 changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
                 decideToChangeLine(dt, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
-                createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line);
+                createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);
             }
 
         }
@@ -99,11 +99,11 @@ class Simulation {
         }
     }
 
-    private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line) {
+    private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line, Road road) {
         Vehicle newVehicle = null;
         if (isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {
             if (isPossibleToCreateNewVehicles(line.getVehicles())) {
-                newVehicle = VehicleFactory.createNewVehicle(line.vehicleCounter++, line, scenario.getTypicalVehicle());
+                newVehicle = VehicleFactory.createNewVehicle(road.vehicleCounter++, line, scenario.getTypicalVehicle());
             }
         }
         if (newVehicle != null) {

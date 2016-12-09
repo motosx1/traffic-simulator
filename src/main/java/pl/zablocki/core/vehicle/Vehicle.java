@@ -124,7 +124,6 @@ public class Vehicle extends RoadObject {
             }
         }
 
-//        Line bestLine = lineAccDifferenceMap.entrySet().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).orElse(null).getKey();
         Map.Entry<Line, Double> bestLineEntry = lineAccDifferenceMap.entrySet().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).orElse(null);
         Line bestLine = null;
         if (bestLineEntry != null) {

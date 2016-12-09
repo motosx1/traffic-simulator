@@ -11,7 +11,6 @@ import java.util.List;
 public class Line {
     @Getter
     private int id;
-    public int vehicleCounter;
     @Getter
     private List<Vehicle> vehicles = new ArrayList<>();
     @Getter

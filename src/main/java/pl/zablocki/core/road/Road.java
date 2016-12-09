@@ -13,6 +13,7 @@ public class Road {
     private int id;
     @Getter
     private List<Line> lines = new ArrayList<>();
+    public int vehicleCounter;
 
     public Road(int id) {
         this.id = id;
