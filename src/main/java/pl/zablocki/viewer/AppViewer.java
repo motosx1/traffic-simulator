@@ -45,7 +45,7 @@ public class AppViewer {
         Scenarios scenarios = new Scenarios();
         scenarios.setSimulationDuration(100 * 60);
         scenarios.getScenarios().add(scenario1);
-        scenarios.getScenarios().add(scenario3);
+//        scenarios.getScenarios().add(scenario3);
 
         return scenarios;
     }
@@ -58,9 +58,9 @@ public class AppViewer {
         stopLight2.setObjectType(ObjectType.STOPLIGHT);
         Line line1 = new Line(0);
         Line line2 = new Line(1);
-        line1.setStopLight(stopLight1);
-        line2.setStopLight(stopLight2);
-        line1.setCarsPerHour(500);
+//        line1.setStopLight(stopLight1);
+//        line2.setStopLight(stopLight2);
+        line1.setCarsPerHour(1000);
         line2.setCarsPerHour(1500);
 
         List<Line> lines = new ArrayList<>();

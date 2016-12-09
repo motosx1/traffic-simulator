@@ -32,7 +32,7 @@ class Simulation {
                 StopLight stopLight = line.getStopLight();
 
                 changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
-                decideToChangeLine(dt, road);
+                decideToChangeLine(elapsedTime, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);
             }
@@ -45,8 +45,8 @@ class Simulation {
         return roadData;
     }
 
-    private void decideToChangeLine(double dt, Road road) {
-        LineChangeModel.decideToChangeLine(dt, road);
+    private void decideToChangeLine(double elapsedTime, Road road) {
+        LineChangeModel.decideToChangeLine(elapsedTime, road);
     }
 
     private void updateVehiclesParameters(double dt, List<Vehicle> vehiclesInTheLine) {

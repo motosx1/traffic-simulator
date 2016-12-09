@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class LineChangeModel {
-    public static void decideToChangeLine(double dt, Road road) {
+    public static void decideToChangeLine(double elapsedTime, Road road) {
         Map<Line, List<Vehicle>> newLineVehiclesMap = new HashMap<>();
         for (Line line : road.getLines()) {
             List<Vehicle> vehiclesInTheLine = line.getVehicles();
@@ -19,7 +19,8 @@ public class LineChangeModel {
 
             for (Vehicle vehicle : vehiclesInTheLine) {
                 Line bestLine = vehicle.getBestAvailableLine(line, availableLines);
-                if (bestLine != null && !bestLine.equals(line)) {
+                if (bestLine != null && !bestLine.equals(line) && pasedSomeTimeFromLastLineChange(vehicle.getLastLineChange(), elapsedTime)) {
+                    vehicle.setLastLineChange(elapsedTime);
                     carsToDelete.add(vehicle);
                     putVehicleToMap(newLineVehiclesMap, bestLine, vehicle);
                 }
@@ -34,6 +35,10 @@ public class LineChangeModel {
 
         fixObjectsInFrontAfterLineChanges(road);
 
+    }
+
+    private static boolean pasedSomeTimeFromLastLineChange(double lastLineChange, double elapsedTime) {
+        return Math.abs(elapsedTime-lastLineChange) > 5;
     }
 
     private static void fixObjectsInFrontAfterLineChanges(Road road) {

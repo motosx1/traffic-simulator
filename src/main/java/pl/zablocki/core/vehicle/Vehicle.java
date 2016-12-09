@@ -22,6 +22,9 @@ public class Vehicle extends RoadObject {
     @Setter
     @Getter
     private AccelerationModel accelerationModel;
+    @Setter
+    @Getter
+    private double lastLineChange;
 
     public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
         this.id = id;
@@ -136,15 +139,18 @@ public class Vehicle extends RoadObject {
     private boolean canChangeToTheLine(Line availableLine) {
         Vehicle vehicleBehind = findVehicleBehind(availableLine.getVehicles());
         Vehicle vehicleInFront = findVehicleInFront(availableLine.getVehicles());
-        if (getDistanceToObject(vehicleBehind) > getLength() * 1.2 && getDistanceToObject(vehicleInFront) > getLength() * 0.1) {
+        if (canJumpInFrontOfBehindObject(vehicleBehind) && getDistanceToObject(vehicleInFront) > getLength() * 0.1) {
             return true;
         }
         return false;
     }
 
+    private boolean canJumpInFrontOfBehindObject(Vehicle vehicleBehind) {
+        return getDistanceToObject(vehicleBehind) / Math.abs(vehicleBehind.getSpeed() - this.getSpeed()) > 1;
+    }
 
     private boolean accDifferenceIsSufficient(double accDifference) {
-        return accDifference > 0.6;
+        return accDifference > 1;
     }
 
     private double simulateCalcAcc(List<Vehicle> vehiclesInTheLine) {
