@@ -12,8 +12,8 @@ public class Scenario {
     private static int idCounter = 0;
     @Getter
     private final int id;
-    @Getter @Setter
-    private double carsPerHour;
+//    @Getter @Setter
+//    private double carsPerHour;
     @Getter @Setter
     private RoadObject typicalVehicle;
     @Getter @Setter

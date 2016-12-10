@@ -95,7 +95,16 @@ public class Vehicle extends RoadObject {
     }
 
     private double getMinimumGap() {
+        if (getObjectType() == ObjectType.AUTONOMUS) {
+            if (isVehicleVeryClose()) {
+                return 1;
+            }
+        }
         return 2;
+    }
+
+    private boolean isVehicleVeryClose() {
+        return objectInFront != null && getDistanceToObject(objectInFront) < 1;
     }
 
     public RoadObject getObjectInFront() {
@@ -146,7 +155,10 @@ public class Vehicle extends RoadObject {
     }
 
     private boolean canJumpInFrontOfBehindObject(Vehicle vehicleBehind) {
-        return getDistanceToObject(vehicleBehind) / Math.abs(vehicleBehind.getSpeed() - this.getSpeed()) > 1;
+        if (vehicleBehind == null) {
+            return true;
+        }
+        return getDistanceToObject(vehicleBehind) / Math.abs(vehicleBehind.getSpeed() - this.getSpeed()) > 0.5;
     }
 
     private boolean accDifferenceIsSufficient(double accDifference) {

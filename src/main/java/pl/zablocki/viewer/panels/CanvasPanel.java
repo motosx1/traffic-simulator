@@ -1,5 +1,6 @@
 package pl.zablocki.viewer.panels;
 
+import pl.zablocki.core.road.Road;
 import pl.zablocki.core.simulation.RoadData;
 import pl.zablocki.core.vehicle.ObjectType;
 import pl.zablocki.core.vehicle.StopLight;
@@ -50,6 +51,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         g2.drawString("Elapsed time: " + decimalFormatter.format(roadData.getElapsedTime()), 20, -180);
 
         roadData.getRoads().forEach(road -> {
+            drawTitle(road, g2);
             road.getLines().forEach(line -> {
                 drawStopLight(line.getStopLight(), road.getId(), line.getId(), g2);
                 drawLine(line.getId(), road.getId(), g2);
@@ -60,6 +62,18 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         });
 
 
+    }
+
+    private void drawTitle(Road road, Graphics2D g2) {
+        Font defaultFont = g2.getFont();
+        g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        if(road.getId() == 0){
+            g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+            g2.drawString("normal cars", 0, getLinePostitionY(0, road.getId())-5);
+        } else if(road.getId()==5){
+            g2.drawString("autonomus cars", 0, getLinePostitionY(0, road.getId())-5);
+        }
+        g2.setFont(defaultFont);
     }
 
     private void drawVehicle(Vehicle vehicle, int roadId, int lineId, Graphics2D g2) {
