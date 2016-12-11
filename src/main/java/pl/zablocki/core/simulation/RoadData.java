@@ -10,8 +10,7 @@ import java.util.List;
 public class RoadData {
     @Getter
     @Setter
-    List<Road> roads = new ArrayList<>();
+    private List<Road> roads = new ArrayList<>();
     @Getter
-    @Setter
-    double elapsedTime;
+    private SimulationStatistics simulationStatistics = new SimulationStatistics();
 }

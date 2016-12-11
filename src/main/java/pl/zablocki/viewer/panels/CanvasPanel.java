@@ -1,6 +1,8 @@
 package pl.zablocki.viewer.panels;
 
+import pl.zablocki.core.road.Road;
 import pl.zablocki.core.simulation.RoadData;
+import pl.zablocki.core.simulation.SimulationStatistics;
 import pl.zablocki.core.vehicle.ObjectType;
 import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
@@ -47,9 +49,10 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             return;
         }
 
-        g2.drawString("Elapsed time: " + decimalFormatter.format(roadData.getElapsedTime()), 20, -180);
+        g2.drawString("Elapsed time: " + decimalFormatter.format(roadData.getSimulationStatistics().getElapsedTime()), 20, -180);
 
         roadData.getRoads().forEach(road -> {
+            drawData(road, g2);
             road.getLines().forEach(line -> {
                 drawStopLight(line.getStopLight(), road.getId(), line.getId(), g2);
                 drawLine(line.getId(), road.getId(), g2);
@@ -59,12 +62,54 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             });
         });
 
+        drawStatistics(g2);
+
+    }
+
+    private void drawData(Road road, Graphics2D g2) {
+        int textPositionY = getLinePostitionY(0, road.getId()) - 5;
+        g2.drawString("autonomous vehicles percentage amount: " + road.getAutonomusPercentage(), getDataBoxX(), textPositionY);
+    }
+
+    private void drawStatistics(Graphics2D g2) {
+        SimulationStatistics simulationStatistics = roadData.getSimulationStatistics();
+
+        drawAverageSpeed(g2, simulationStatistics.getAverageSpeed());
+        drawStoppedVehiclesAmount(g2, simulationStatistics.getStoppedVehicles());
+    }
+
+    private void drawAverageSpeed(Graphics2D g2, Map<Road, Double> averageSpeedMap) {
+        for (Map.Entry<Road, Double> entry : averageSpeedMap.entrySet()) {
+            Road road = entry.getKey();
+            Double averageSpeed = entry.getValue();
+
+            int textPositionY = getLinePostitionY(0, road.getId()) - 5;
+            g2.drawString("average speed: " + decimalFormatter.format(averageSpeed), getStatisticsBoxX(), textPositionY);
+        }
+    }
+
+    private void drawStoppedVehiclesAmount(Graphics2D g2, Map<Road, Integer> stoppedVehiclesMap) {
+        for (Map.Entry<Road, Integer> entry : stoppedVehiclesMap.entrySet()) {
+            Road road = entry.getKey();
+            Integer stoppedVehicles = entry.getValue();
+
+            int textPositionY = getLinePostitionY(0, road.getId()) - 18;
+            g2.drawString("stopped vehicles: " + stoppedVehicles, getStatisticsBoxX(), textPositionY);
+        }
+    }
+
+    private int getStatisticsBoxX() {
+        return 300;
+    }
+
+    private int getDataBoxX() {
+        return 10;
     }
 
     private void drawVehicle(Vehicle vehicle, int roadId, int lineId, Graphics2D g2) {
         if (vehicle != null) {
             int carHeight = 10;
-            if( vehicle.getObjectType() == ObjectType.OBSTACLE ){
+            if (vehicle.getObjectType() == ObjectType.OBSTACLE) {
                 g2.setColor(Color.BLACK);
             } else {
                 Color color = getRedGreenScaledColor(vehicle.getSpeed(), vehicle.getMaxSpeed());
@@ -72,25 +117,25 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             }
             int carPositionY = getCarPositionY(lineWidth, carHeight, roadId, lineId);
             double position = vehicle.getPosition();
-            if( vehicle.getObjectType() == ObjectType.AUTONOMUS ){
+            if (vehicle.getObjectType() == ObjectType.AUTONOMUS) {
                 g2.fillOval((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
             } else {
                 g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
             }
             g2.setColor(Color.BLACK);
             //+ "/" + decimalFormatter.format(vehicle.getSpeed())
-            g2.drawString("" + vehicle.getId(), (int) position+2, carPositionY + 10);
+            g2.drawString("" + vehicle.getId(), (int) position + 2, carPositionY + 10);
         }
 
     }
 
     private void drawStopLight(StopLight stopLight, int roadId, int lineId, Graphics2D g2) {
         if (stopLight != null) {
-            int lightPosition = getLinePostitionY(lineId, roadId)+2;
+            int lightPosition = getLinePostitionY(lineId, roadId) + 2;
             g2.setColor(stopLight.getColor());
-            g2.fillRect((int) (stopLight.getPosition()+stopLight.getLength()), lightPosition, 10, 10);
+            g2.fillRect((int) (stopLight.getPosition() + stopLight.getLength()), lightPosition, 10, 10);
             int ovalDiameter = stopLight.getNotifyRadius();
-            g2.fillRect((int) stopLight.getPosition() - ovalDiameter / 2, lightPosition-6, 3, 26);
+            g2.fillRect((int) stopLight.getPosition() - ovalDiameter / 2, lightPosition - 6, 3, 26);
         }
     }
 

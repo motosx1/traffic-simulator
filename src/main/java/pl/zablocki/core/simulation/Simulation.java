@@ -4,11 +4,14 @@ import pl.zablocki.core.model.LineChangeModel;
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
 import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.vehicle.ObjectType;
 import pl.zablocki.core.vehicle.StopLight;
 import pl.zablocki.core.vehicle.Vehicle;
 import pl.zablocki.core.vehicle.VehicleFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 class Simulation {
@@ -38,12 +41,33 @@ class Simulation {
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);
             }
-
         }
 
+
+        return createRoadDataForListeners();
+    }
+
+    private RoadData createRoadDataForListeners() {
         RoadData roadData = new RoadData();
         List<Road> roads = scenarios.getScenarios().stream().map(Scenario::getRoad).collect(Collectors.toList());
         roadData.getRoads().addAll(roads);
+
+        Map<Road, Double> averageSpeedMap = new HashMap<>();
+        Map<Road, Integer> stoppedVehiclesMap = new HashMap<>();
+        for (Road road : roads) {
+            List<Vehicle> allVehicles = road.getLines().stream().flatMap(line -> line.getVehicles().stream()).collect(Collectors.toList());
+            double totalSpeed = allVehicles.stream().mapToDouble(Vehicle::getSpeed).sum();
+            double averageSpeed = totalSpeed / allVehicles.size();
+            averageSpeedMap.put(road, averageSpeed);
+
+            List<Vehicle> stoppedVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getSpeed() < 0.5 && (vehicle.getObjectType() == ObjectType.AUTONOMUS || vehicle.getObjectType() == ObjectType.NORMAL))
+                    .collect(Collectors.toList());
+            stoppedVehiclesMap.put(road, stoppedVehicles.size());
+        }
+        roadData.getSimulationStatistics().setAverageSpeed(averageSpeedMap);
+        roadData.getSimulationStatistics().setStoppedVehicles(stoppedVehiclesMap);
+
         return roadData;
     }
 
@@ -102,6 +126,7 @@ class Simulation {
     }
 
     private boolean forceCreate = false;
+
     private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line, Road road) {
         Vehicle newVehicle = null;
         if (forceCreate || isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {

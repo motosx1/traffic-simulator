@@ -28,7 +28,7 @@ public class SimulationRunnable implements Runnable {
 
         while (elapsedTime < scenarios.getSimulationDuration()) {
             RoadData roadData = simulation.doStep(dt, elapsedTime);
-            roadData.setElapsedTime(elapsedTime);
+            roadData.getSimulationStatistics().setElapsedTime(elapsedTime);
             notifyListeners(roadData);
             sleep();
             elapsedTime += dt;
