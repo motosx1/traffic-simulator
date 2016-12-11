@@ -19,8 +19,9 @@ class Simulation {
         this.scenarios = scenarios;
     }
 
-    private void deleteNotActiveVehicles() {
-
+    private void deleteNotActiveVehicles(Line line) {
+        List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1700).collect(Collectors.toList());
+        line.getVehicles().removeAll(notActiveVehicles);
     }
 
     RoadData doStep(double dt, double elapsedTime) {
@@ -32,6 +33,7 @@ class Simulation {
                 StopLight stopLight = line.getStopLight();
 
                 changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
+                deleteNotActiveVehicles(line);
                 decideToChangeLine(elapsedTime, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);
