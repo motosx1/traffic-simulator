@@ -38,8 +38,8 @@ public class AppViewer {
 
     private Scenarios loadScenarios() {
         //TODO init with xml
-        Scenario scenario1 = createNewScenario(0, 35, ObjectType.NORMAL);
-        Scenario scenario3 = createNewScenario(5, 1, ObjectType.AUTONOMUS);
+        Scenario scenario1 = createNewScenario(0, 0);
+        Scenario scenario3 = createNewScenario(5, 80);
 
 
         Scenarios scenarios = new Scenarios();
@@ -50,7 +50,7 @@ public class AppViewer {
         return scenarios;
     }
 
-    private Scenario createNewScenario(int roadId, int bParam, ObjectType type) {
+    private Scenario createNewScenario(int roadId, int autonomusPercentage) {
 
         StopLight stopLight1 = new StopLight(1600);
         StopLight stopLight2 = new StopLight(1600);
@@ -81,16 +81,14 @@ public class AppViewer {
         typicalVehicleData.setMaxAcceleration(2.2);
         typicalVehicleData.setSpeed(15);
         typicalVehicleData.setMaxSpeed(20);
-        typicalVehicleData.setBreakingRappidness(bParam);
-        typicalVehicleData.setObjectType(type);
 
         Road road = new Road(roadId);
         road.getLines().addAll(lines);
+        road.setAutonomusPercentage(autonomusPercentage);
 
         Scenario scenario = new Scenario();
         scenario.setTypicalVehicle(typicalVehicleData);
         scenario.setRoad(road);
-//        scenario.setCarsPerHour(500);
 
         return scenario;
 

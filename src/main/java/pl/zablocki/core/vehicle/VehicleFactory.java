@@ -1,15 +1,52 @@
 package pl.zablocki.core.vehicle;
 
 import pl.zablocki.core.road.Line;
+import pl.zablocki.core.road.Road;
 import pl.zablocki.core.road.RoadObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VehicleFactory {
+    private static Map<Road, Integer> carsOnRoadAmount = new HashMap<>();
+    private static Map<Road, Integer> autonomusOnRoadAmount = new HashMap<>();
 
-    public static Vehicle createNewVehicle(int id, Line line, RoadObject roadObject) {
+    public static Vehicle createNewVehicle(int id, Line line, RoadObject roadObject, Road road) {
+        ObjectType carType = decideObjectTypeToCreate(road);
+        roadObject.setObjectType(carType);
         Vehicle firstInList = findFirstVehicle(line.getVehicles());
         return new Vehicle(id, roadObject, firstInList);
+    }
+
+    private static ObjectType decideObjectTypeToCreate(Road road) {
+        initHashMaps(road);
+        Integer carsAmount = carsOnRoadAmount.get(road);
+        Integer autonomusCarsAmount = autonomusOnRoadAmount.get(road);
+        if( carsAmount == 0 ){
+            carsOnRoadAmount.put(road, 1);
+            return ObjectType.NORMAL;
+        }
+
+        double autonomusPercentage = autonomusCarsAmount/(double)carsAmount;
+        if( autonomusPercentage < road.getAutonomusPercentage()/100 ){
+            carsOnRoadAmount.put(road, carsAmount+1);
+            autonomusOnRoadAmount.put(road, autonomusCarsAmount+1);
+            return ObjectType.AUTONOMUS;
+        }
+        carsOnRoadAmount.put(road, carsAmount+1);
+        return ObjectType.NORMAL;
+    }
+
+    private static void initHashMaps(Road road) {
+        Integer carsAmount = carsOnRoadAmount.get(road);
+        Integer autonomusCarsAmount = autonomusOnRoadAmount.get(road);
+        if(carsAmount == null ){
+            carsOnRoadAmount.put(road,0);
+        }
+        if(autonomusCarsAmount == null ){
+            autonomusOnRoadAmount.put(road,0);
+        }
     }
 
     private static Vehicle findFirstVehicle(List<Vehicle> vehiclesInLine) {
@@ -21,10 +58,10 @@ public class VehicleFactory {
         double theClosestVehicleDistance = 10000000;
 
         for (Vehicle vehicle : vehiclesInLine) {
-                double vehicleDistance = vehicle.getPosition();
-                if (theClosestVehicleDistance > vehicleDistance) {
-                    theClosestVehicle = vehicle;
-                }
+            double vehicleDistance = vehicle.getPosition();
+            if (theClosestVehicleDistance > vehicleDistance) {
+                theClosestVehicle = vehicle;
+            }
         }
 
         return theClosestVehicle;

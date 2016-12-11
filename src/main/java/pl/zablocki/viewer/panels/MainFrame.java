@@ -30,7 +30,7 @@ public class MainFrame extends JFrame {
         buttonsPanel.setPreferredSize(new Dimension(BUTTONS_PANEL_WIDTH, (int) buttonsPanel.getPreferredSize().getHeight()));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.PAGE_AXIS));
 
-        add(buttonsPanel, BorderLayout.EAST);
+//        add(buttonsPanel, BorderLayout.EAST);
     }
 
     private void addCanvas() {

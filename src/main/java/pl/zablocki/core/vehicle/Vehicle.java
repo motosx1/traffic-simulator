@@ -61,19 +61,21 @@ public class Vehicle extends RoadObject {
         double tLocal = 1;
         double v0Local = getMaxSpeed();
         double aLocal = getMaxAcceleration();
+        double bParam = getBreakingRappidness();
 
         // actual Gipps formula
-        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRappidness(), getMinimumGap());
+        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, bParam, getMinimumGap());
 
     }
 
     private double validateSpeed(double speed) {
+        double result = speed;
         if (speed < 0) {
-            speed = 0;
+            result = 0;
         } else if (speed > getMaxSpeed()) {
-            speed = getMaxSpeed();
+            result = getMaxSpeed();
         }
-        return speed;
+        return result;
     }
 
     private double getRelativeSpeed() {

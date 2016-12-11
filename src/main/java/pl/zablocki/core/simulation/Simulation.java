@@ -20,7 +20,7 @@ class Simulation {
     }
 
     private void deleteNotActiveVehicles(Line line) {
-        List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1700).collect(Collectors.toList());
+        List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1800).collect(Collectors.toList());
         line.getVehicles().removeAll(notActiveVehicles);
     }
 
@@ -101,11 +101,14 @@ class Simulation {
         }
     }
 
+    private boolean forceCreate = false;
     private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line, Road road) {
         Vehicle newVehicle = null;
-        if (isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {
+        if (forceCreate || isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {
+            forceCreate = true;
             if (isPossibleToCreateNewVehicles(line.getVehicles())) {
-                newVehicle = VehicleFactory.createNewVehicle(road.vehicleCounter++, line, scenario.getTypicalVehicle());
+                newVehicle = VehicleFactory.createNewVehicle(road.vehicleCounter++, line, scenario.getTypicalVehicle(), road);
+                forceCreate = false;
             }
         }
         if (newVehicle != null) {

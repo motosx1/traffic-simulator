@@ -23,10 +23,17 @@ public class RoadObject {
     @Getter
     @Setter
     private double length = 20;
-    @Getter
     @Setter
     private double breakingRappidness;
     @Getter
     @Setter
     private ObjectType objectType;
+
+    public double getBreakingRappidness() {
+        if( objectType == ObjectType.AUTONOMUS) {
+            return 1;
+        }
+
+        return 35;
+    }
 }
