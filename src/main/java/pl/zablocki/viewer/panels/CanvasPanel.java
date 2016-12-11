@@ -22,7 +22,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     private RoadData roadData;
     private NumberFormat decimalFormatter = new DecimalFormat("#0.00");
-    private int distanceBetweenRoads = 30;
+    private int distanceBetweenRoads = 150;
     private int lineWidth = 14;
 
 

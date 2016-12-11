@@ -39,7 +39,7 @@ public class AppViewer {
     private Scenarios loadScenarios() {
         //TODO init with xml
         Scenario scenario1 = createNewScenario(0, 0);
-        Scenario scenario3 = createNewScenario(5, 80);
+        Scenario scenario3 = createNewScenario(1, 80);
 
 
         Scenarios scenarios = new Scenarios();
