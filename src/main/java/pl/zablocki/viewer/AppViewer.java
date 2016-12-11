@@ -50,7 +50,7 @@ public class AppViewer {
         return scenarios;
     }
 
-    private Scenario createNewScenario(int roadId, int autonomusPercentage) {
+    private Scenario createNewScenario(int roadId, int autonomousPercentage) {
 
         StopLight stopLight1 = new StopLight(1600);
         StopLight stopLight2 = new StopLight(1600);
@@ -84,7 +84,7 @@ public class AppViewer {
 
         Road road = new Road(roadId);
         road.getLines().addAll(lines);
-        road.setAutonomusPercentage(autonomusPercentage);
+        road.setAutonomousPercentage(autonomousPercentage);
 
         Scenario scenario = new Scenario();
         scenario.setTypicalVehicle(typicalVehicleData);

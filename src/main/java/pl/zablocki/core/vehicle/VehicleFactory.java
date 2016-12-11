@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class VehicleFactory {
     private static Map<Road, Integer> carsOnRoadAmount = new HashMap<>();
-    private static Map<Road, Integer> autonomusOnRoadAmount = new HashMap<>();
+    private static Map<Road, Integer> autonomousOnRoadAmount = new HashMap<>();
 
     public static Vehicle createNewVehicle(int id, Line line, RoadObject roadObject, Road road) {
         ObjectType carType = decideObjectTypeToCreate(road);
@@ -22,17 +22,17 @@ public class VehicleFactory {
     private static ObjectType decideObjectTypeToCreate(Road road) {
         initHashMaps(road);
         Integer carsAmount = carsOnRoadAmount.get(road);
-        Integer autonomusCarsAmount = autonomusOnRoadAmount.get(road);
+        Integer autonomousCarsAmount = autonomousOnRoadAmount.get(road);
         if( carsAmount == 0 ){
             carsOnRoadAmount.put(road, 1);
             return ObjectType.NORMAL;
         }
 
-        double autonomusPercentage = autonomusCarsAmount/(double)carsAmount;
-        if( autonomusPercentage < road.getAutonomusPercentage()/100 ){
+        double autonomousPercentage = autonomousCarsAmount/(double)carsAmount;
+        if( autonomousPercentage < road.getAutonomousPercentage()/100 ){
             carsOnRoadAmount.put(road, carsAmount+1);
-            autonomusOnRoadAmount.put(road, autonomusCarsAmount+1);
-            return ObjectType.AUTONOMUS;
+            autonomousOnRoadAmount.put(road, autonomousCarsAmount+1);
+            return ObjectType.AUTONOMOUS;
         }
         carsOnRoadAmount.put(road, carsAmount+1);
         return ObjectType.NORMAL;
@@ -40,12 +40,12 @@ public class VehicleFactory {
 
     private static void initHashMaps(Road road) {
         Integer carsAmount = carsOnRoadAmount.get(road);
-        Integer autonomusCarsAmount = autonomusOnRoadAmount.get(road);
+        Integer autonomousCarsAmount = autonomousOnRoadAmount.get(road);
         if(carsAmount == null ){
             carsOnRoadAmount.put(road,0);
         }
-        if(autonomusCarsAmount == null ){
-            autonomusOnRoadAmount.put(road,0);
+        if(autonomousCarsAmount == null ){
+            autonomousOnRoadAmount.put(road,0);
         }
     }
 

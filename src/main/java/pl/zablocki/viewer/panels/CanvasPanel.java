@@ -68,7 +68,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     private void drawData(Road road, Graphics2D g2) {
         int textPositionY = getLinePostitionY(0, road.getId()) - 5;
-        g2.drawString("autonomous vehicles percentage amount: " + road.getAutonomusPercentage(), getDataBoxX(), textPositionY);
+        g2.drawString("autonomous vehicles percentage amount: " + road.getAutonomousPercentage(), getDataBoxX(), textPositionY);
     }
 
     private void drawStatistics(Graphics2D g2) {
@@ -117,7 +117,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             }
             int carPositionY = getCarPositionY(lineWidth, carHeight, roadId, lineId);
             double position = vehicle.getPosition();
-            if (vehicle.getObjectType() == ObjectType.AUTONOMUS) {
+            if (vehicle.getObjectType() == ObjectType.AUTONOMOUS) {
                 g2.fillOval((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
             } else {
                 g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);

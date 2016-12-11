@@ -30,7 +30,7 @@ public class RoadObject {
     private ObjectType objectType;
 
     public double getBreakingRappidness() {
-        if( objectType == ObjectType.AUTONOMUS) {
+        if( objectType == ObjectType.AUTONOMOUS) {
             return 1;
         }
 

@@ -61,7 +61,7 @@ class Simulation {
             averageSpeedMap.put(road, averageSpeed);
 
             List<Vehicle> stoppedVehicles = allVehicles.stream()
-                    .filter(vehicle -> vehicle.getSpeed() < 0.5 && (vehicle.getObjectType() == ObjectType.AUTONOMUS || vehicle.getObjectType() == ObjectType.NORMAL))
+                    .filter(vehicle -> vehicle.getSpeed() < 0.5 && (vehicle.getObjectType() == ObjectType.AUTONOMOUS || vehicle.getObjectType() == ObjectType.NORMAL))
                     .collect(Collectors.toList());
             stoppedVehiclesMap.put(road, stoppedVehicles.size());
         }

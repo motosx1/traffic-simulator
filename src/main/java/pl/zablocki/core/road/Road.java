@@ -17,7 +17,7 @@ public class Road {
     public int vehicleCounter;
     @Getter
     @Setter
-    private double autonomusPercentage;
+    private double autonomousPercentage;
 
     public Road(int id) {
         this.id = id;

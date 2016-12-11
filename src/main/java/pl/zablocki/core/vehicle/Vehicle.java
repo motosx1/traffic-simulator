@@ -97,7 +97,7 @@ public class Vehicle extends RoadObject {
     }
 
     private double getMinimumGap() {
-        if (getObjectType() == ObjectType.AUTONOMUS) {
+        if (getObjectType() == ObjectType.AUTONOMOUS) {
             if (isVehicleVeryClose()) {
                 return 1;
             }
