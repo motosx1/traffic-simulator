@@ -1,6 +1,7 @@
 package pl.zablocki.core.road;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ public class Road {
     @Getter
     private List<Line> lines = new ArrayList<>();
     public int vehicleCounter;
+    @Getter
+    @Setter
+    private int autonomusPercentage;
 
     public Road(int id) {
         this.id = id;

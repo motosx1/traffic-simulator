@@ -87,10 +87,14 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
             }
             int carPositionY = getCarPositionY(lineWidth, carHeight, roadId, lineId);
             double position = vehicle.getPosition();
-            g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
+            if( vehicle.getObjectType() == ObjectType.AUTONOMUS ){
+                g2.fillOval((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
+            } else {
+                g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
+            }
             g2.setColor(Color.BLACK);
             //+ "/" + decimalFormatter.format(vehicle.getSpeed())
-            g2.drawString("" + vehicle.getId(), (int) position, carPositionY + 10);
+            g2.drawString("" + vehicle.getId(), (int) position+2, carPositionY + 10);
         }
 
     }

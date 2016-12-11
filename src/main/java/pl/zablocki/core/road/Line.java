@@ -20,6 +20,7 @@ public class Line {
     @Setter
     private double carsPerHour;
 
+
     public Line(int id) {
         this.id = id;
     }
