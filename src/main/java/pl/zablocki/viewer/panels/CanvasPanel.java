@@ -51,24 +51,26 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
         g2.drawString("Elapsed time: " + decimalFormatter.format(roadData.getSimulationStatistics().getElapsedTime()), 20, -180);
 
-        roadData.getRoads().forEach(road -> {
-            drawData(road, g2);
-            road.getLines().forEach(line -> {
-                drawStopLight(line.getStopLight(), road.getId(), line.getId(), g2);
-                drawLine(line.getId(), road.getId(), g2);
-                line.getVehicles().forEach(vehicle ->
-                        drawVehicle(vehicle, road.getId(), line.getId(), g2)
-                );
+        try {
+            roadData.getRoads().forEach(road -> {
+                drawData(road, g2);
+                road.getLines().forEach(line -> {
+                    drawStopLight(line.getStopLight(), road.getId(), line.getId(), g2);
+                    drawLine(line.getId(), road.getId(), g2);
+                    line.getVehicles().forEach(vehicle ->
+                            drawVehicle(vehicle, road.getId(), line.getId(), g2)
+                    );
+                });
             });
-        });
 
-        drawStatistics(g2);
+            drawStatistics(g2);
+        } catch (Exception ignored){}
 
     }
 
     private void drawData(Road road, Graphics2D g2) {
         int textPositionY = getLinePostitionY(0, road.getId()) - 5;
-        g2.drawString("autonomous vehicles percentage amount: " + road.getAutonomousPercentage(), getDataBoxX(), textPositionY);
+        g2.drawString("autonomous vehicles percentage amount: " + road.getAutonomousPercentage() + "%", getDataBoxX(), textPositionY);
     }
 
     private void drawStatistics(Graphics2D g2) {

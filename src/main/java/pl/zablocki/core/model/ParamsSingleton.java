@@ -2,12 +2,17 @@ package pl.zablocki.core.model;
 
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class ParamsSingleton {
 
     private static ParamsSingleton instance = null;
 
     @Getter
+    @Setter
+    private double threadSleep = 40;
+    @Getter
+    @Setter
     private double dt = 0.2;
 
     private ParamsSingleton() {

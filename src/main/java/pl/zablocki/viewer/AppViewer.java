@@ -21,14 +21,15 @@ public class AppViewer {
 
     public static void main(String[] args) {
         AppViewer appViewer = new AppViewer();
-        appViewer.init();
         appViewer.run();
     }
 
     private void run() {
+        init();
         SimulationRunnable simulationRunnable = new SimulationRunnable(scenarios);
         simulationRunnable.addListener(mainFrame.getCanvas());
-        simulationRunnable.run();
+        Thread simulationThread = new Thread(simulationRunnable);
+        simulationThread.start();
     }
 
     private void init() {

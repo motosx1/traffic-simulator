@@ -23,10 +23,10 @@ public class SimulationRunnable implements Runnable {
     }
 
     public void run() {
-        double dt = params.getDt();
         double elapsedTime = 0;
 
         while (elapsedTime < scenarios.getSimulationDuration()) {
+            double dt = params.getDt();
             RoadData roadData = simulation.doStep(dt, elapsedTime);
             roadData.getSimulationStatistics().setElapsedTime(elapsedTime);
             notifyListeners(roadData);
@@ -55,7 +55,7 @@ public class SimulationRunnable implements Runnable {
 
     private void sleep() {
         try {
-            Thread.sleep(40);
+            Thread.sleep((long) params.getThreadSleep());
         } catch (InterruptedException e) {
             System.err.println(e);
         }
