@@ -2,8 +2,8 @@ package pl.zablocki.core.model;
 
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.vehicle.Vehicle;
-import pl.zablocki.core.vehicle.ObjectType;
+import pl.zablocki.core.roadobjects.Vehicle;
+import pl.zablocki.core.roadobjects.ObjectType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +19,7 @@ public class LineChangeModel {
 
             for (Vehicle vehicle : vehiclesInTheLine) {
                 Line bestLine = vehicle.getBestAvailableLine(line, availableLines);
-                if (bestLine != null && !bestLine.equals(line) && pasedSomeTimeFromLastLineChange(vehicle.getLastLineChange(), elapsedTime)) {
+                if (bestLine != null && !bestLine.equals(line) && passedSomeTimeFromLastLineChange(vehicle.getLastLineChange(), elapsedTime)) {
                     vehicle.setLastLineChange(elapsedTime);
                     carsToDelete.add(vehicle);
                     putVehicleToMap(newLineVehiclesMap, bestLine, vehicle);
@@ -37,7 +37,7 @@ public class LineChangeModel {
 
     }
 
-    private static boolean pasedSomeTimeFromLastLineChange(double lastLineChange, double elapsedTime) {
+    private static boolean passedSomeTimeFromLastLineChange(double lastLineChange, double elapsedTime) {
         return Math.abs(elapsedTime-lastLineChange) > 5;
     }
 

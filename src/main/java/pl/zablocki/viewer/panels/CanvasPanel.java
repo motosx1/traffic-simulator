@@ -3,10 +3,10 @@ package pl.zablocki.viewer.panels;
 import pl.zablocki.core.road.Road;
 import pl.zablocki.core.simulation.RoadData;
 import pl.zablocki.core.simulation.SimulationStatistics;
-import pl.zablocki.core.vehicle.ObjectType;
-import pl.zablocki.core.vehicle.StopLight;
-import pl.zablocki.core.vehicle.Vehicle;
-import pl.zablocki.core.vehicle.VehicleDataListener;
+import pl.zablocki.core.roadobjects.ObjectType;
+import pl.zablocki.core.roadobjects.StopLight;
+import pl.zablocki.core.roadobjects.Vehicle;
+import pl.zablocki.core.roadobjects.VehicleDataListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -125,7 +125,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
                 g2.fillRect((int) position, carPositionY, (int) vehicle.getLength(), carHeight);
             }
             g2.setColor(Color.BLACK);
-            //+ "/" + decimalFormatter.format(vehicle.getSpeed())
+            //+ "/" + decimalFormatter.format(roadobjects.getSpeed())
             g2.drawString("" + vehicle.getId(), (int) position + 2, carPositionY + 10);
         }
 

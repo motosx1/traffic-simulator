@@ -2,7 +2,7 @@ package pl.zablocki.core.road;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.zablocki.core.vehicle.ObjectType;
+import pl.zablocki.core.roadobjects.ObjectType;
 
 public class RoadObject {
     @Getter

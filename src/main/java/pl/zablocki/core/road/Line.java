@@ -2,8 +2,8 @@ package pl.zablocki.core.road;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.zablocki.core.vehicle.StopLight;
-import pl.zablocki.core.vehicle.Vehicle;
+import pl.zablocki.core.roadobjects.StopLight;
+import pl.zablocki.core.roadobjects.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;

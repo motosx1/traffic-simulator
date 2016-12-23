@@ -9,7 +9,7 @@ import pl.zablocki.core.road.RoadObject;
 
 @ToString
 public class Scenario {
-    private static int idCounter = 0;
+    private static int vehicleCounter = 0;
     @Getter
     private final int id;
     @Getter @Setter
@@ -18,6 +18,6 @@ public class Scenario {
     private Road road;
 
     public Scenario() {
-        this.id = idCounter++;
+        this.id = vehicleCounter++;
     }
 }

@@ -1,9 +1,7 @@
 package pl.zablocki.core.simulation;
 
 import pl.zablocki.core.model.ParamsSingleton;
-import pl.zablocki.core.vehicle.VehicleDataListener;
-import pl.zablocki.viewer.panels.CanvasPanel;
-import pl.zablocki.viewer.panels.MainFrame;
+import pl.zablocki.core.roadobjects.VehicleDataListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.List;
 public class SimulationRunnable implements Runnable {
 
     private Scenarios scenarios;
-    private MainFrame mainFrame;
     private Simulation simulation;
     private List<VehicleDataListener> listeners = new ArrayList<>();
     private ParamsSingleton params = ParamsSingleton.getInstance();
@@ -22,6 +19,7 @@ public class SimulationRunnable implements Runnable {
         prepareSimulation();
     }
 
+    @Override
     public void run() {
         double elapsedTime = 0;
 
@@ -37,10 +35,6 @@ public class SimulationRunnable implements Runnable {
 
     public void addListener(VehicleDataListener vehicleDataListener) {
         listeners.add(vehicleDataListener);
-    }
-
-    public CanvasPanel getCanvas() {
-        return mainFrame.getCanvas();
     }
 
     private void notifyListeners(RoadData roadData) {

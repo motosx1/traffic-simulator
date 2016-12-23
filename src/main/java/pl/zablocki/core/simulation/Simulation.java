@@ -4,10 +4,10 @@ import pl.zablocki.core.model.LineChangeModel;
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
 import pl.zablocki.core.road.RoadObject;
-import pl.zablocki.core.vehicle.ObjectType;
-import pl.zablocki.core.vehicle.StopLight;
-import pl.zablocki.core.vehicle.Vehicle;
-import pl.zablocki.core.vehicle.VehicleFactory;
+import pl.zablocki.core.roadobjects.ObjectType;
+import pl.zablocki.core.roadobjects.StopLight;
+import pl.zablocki.core.roadobjects.Vehicle;
+import pl.zablocki.core.roadobjects.VehicleFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +20,6 @@ class Simulation {
 
     Simulation(Scenarios scenarios) {
         this.scenarios = scenarios;
-    }
-
-    private void deleteNotActiveVehicles(Line line) {
-        List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1800).collect(Collectors.toList());
-        line.getVehicles().removeAll(notActiveVehicles);
     }
 
     RoadData doStep(double dt, double elapsedTime) {
@@ -71,6 +66,11 @@ class Simulation {
         return roadData;
     }
 
+    private void deleteNotActiveVehicles(Line line) {
+        List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1800).collect(Collectors.toList());
+        line.getVehicles().removeAll(notActiveVehicles);
+    }
+
     private void decideToChangeLine(double elapsedTime, Road road) {
         LineChangeModel.decideToChangeLine(elapsedTime, road);
     }
@@ -89,13 +89,28 @@ class Simulation {
         }
     }
 
-    private void checkBroadcastingGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
-        if (stopLight.isBroadcastingGreen()) {
-            assignGreen(vehiclesInTheLine, stopLight);
+    private void checkBroadcastingRed(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        for (Vehicle vehicle : vehiclesInTheLine) {
+            if (stopLight.isBroadcastingRed()) {
+                assignRedLightToVehicle(stopLight, vehicle);
+            }
         }
     }
 
-    private void assignGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+    private void checkBroadcastingGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+        if (stopLight.isBroadcastingGreen()) {
+            assignGreenLightToVehicles(vehiclesInTheLine, stopLight);
+        }
+    }
+
+    private void assignRedLightToVehicle(StopLight stopLight, Vehicle vehicle) {
+        if (stopLight.isVehicleInRange(vehicle)) {
+            vehicle.setObjectInFront(stopLight);
+            stopLight.setBroadcastingRed(false);
+        }
+    }
+
+    private void assignGreenLightToVehicles(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
         boolean found = false;
         for (Vehicle vehicle : vehiclesInTheLine) {
             if (!found) {
@@ -107,21 +122,6 @@ class Simulation {
                     }
                 }
             }
-        }
-    }
-
-    private void checkBroadcastingRed(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
-        for (Vehicle vehicle : vehiclesInTheLine) {
-            if (stopLight.isBroadcastingRed()) {
-                assignRed(stopLight, vehicle);
-            }
-        }
-    }
-
-    private void assignRed(StopLight stopLight, Vehicle vehicle) {
-        if (stopLight.isVehicleInRange(vehicle)) {
-            vehicle.setObjectInFront(stopLight);
-            stopLight.setBroadcastingRed(false);
         }
     }
 

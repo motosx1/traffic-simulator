@@ -1,4 +1,4 @@
-package pl.zablocki.core.vehicle;
+package pl.zablocki.core.roadobjects;
 
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;

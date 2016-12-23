@@ -1,4 +1,4 @@
-package pl.zablocki.core.vehicle;
+package pl.zablocki.core.roadobjects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -120,15 +120,15 @@ public class Vehicle extends RoadObject {
                 .orElse(null);
     }
 
-    public Vehicle findVehicleBehind(List<Vehicle> vehiclesInTheLine) {
+    private Vehicle getVehicleBehind(List<Vehicle> vehiclesInTheLine) {
         return vehiclesInTheLine.stream()
                 .filter(vehicle -> vehicle.getPosition() < this.getPosition())
                 .max((o1, o2) -> (int) (o1.getPosition() - o2.getPosition()))
                 .orElse(null);
     }
 
-    public Line getBestAvailableLine(Line line, List<Line> availableLines) {
-        double currentAcc = simulateCalcAcc(line.getVehicles());
+    public Line getBestAvailableLine(Line currentLine, List<Line> availableLines) {
+        double currentAcc = simulateCalcAcc(currentLine.getVehicles());
         Map<Line, Double> lineAccDifferenceMap = new HashMap<>();
         for (Line availableLine : availableLines) {
             double accOnDifferentLine = simulateCalcAcc(availableLine.getVehicles());
@@ -148,15 +148,15 @@ public class Vehicle extends RoadObject {
     }
 
     private boolean canChangeToTheLine(Line availableLine) {
-        Vehicle vehicleBehind = findVehicleBehind(availableLine.getVehicles());
+        Vehicle vehicleBehind = getVehicleBehind(availableLine.getVehicles());
         Vehicle vehicleInFront = findVehicleInFront(availableLine.getVehicles());
-        if (canJumpInFrontOfBehindObject(vehicleBehind) && getDistanceToObject(vehicleInFront) > getLength() * 0.1) {
+        if (canJumpInFrontOfVehicle(vehicleBehind) && getDistanceToObject(vehicleInFront) > getLength() * 0.1) {
             return true;
         }
         return false;
     }
 
-    private boolean canJumpInFrontOfBehindObject(Vehicle vehicleBehind) {
+    private boolean canJumpInFrontOfVehicle(Vehicle vehicleBehind) {
         if (vehicleBehind == null) {
             return true;
         }

@@ -1,4 +1,4 @@
-package pl.zablocki.core.vehicle;
+package pl.zablocki.core.roadobjects;
 
 import pl.zablocki.core.simulation.RoadData;
 
