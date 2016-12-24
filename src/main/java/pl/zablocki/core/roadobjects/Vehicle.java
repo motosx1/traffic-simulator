@@ -39,7 +39,7 @@ public class Vehicle extends RoadObject {
         setMaxAcceleration(vehicleParams.getMaxAcceleration());
         setSpeed(vehicleParams.getSpeed());
         setMaxSpeed(vehicleParams.getMaxSpeed());
-        setBreakingRappidness(vehicleParams.getBreakingRapidness());
+        setBreakingRapidness(vehicleParams.getBreakingRapidness());
         setPosition(vehicleParams.getPosition());
         setObjectType(vehicleParams.getObjectType() == null ? ObjectType.NORMAL : vehicleParams.getObjectType());
     }
