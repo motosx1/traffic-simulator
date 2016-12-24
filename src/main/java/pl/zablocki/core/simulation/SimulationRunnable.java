@@ -22,9 +22,9 @@ public class SimulationRunnable implements Runnable {
     @Override
     public void run() {
         double elapsedTime = 0;
+        double dt = params.getDt();
 
         while (elapsedTime < scenarios.getSimulationDuration()) {
-            double dt = params.getDt();
             RoadData roadData = simulation.doStep(dt, elapsedTime);
             roadData.getSimulationStatistics().setElapsedTime(elapsedTime);
             notifyListeners(roadData);

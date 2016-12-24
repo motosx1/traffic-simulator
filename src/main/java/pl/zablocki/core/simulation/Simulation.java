@@ -84,12 +84,12 @@ class Simulation {
     private void changeStopLight(double dt, double elapsedTime, List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
         if (stopLight != null) {
             stopLight.changeLight(dt, elapsedTime);
-            checkBroadcastingRed(vehiclesInTheLine, stopLight);
-            checkBroadcastingGreen(vehiclesInTheLine, stopLight);
+            broadcastingRedAction(vehiclesInTheLine, stopLight);
+            broadcastingGreenAction(vehiclesInTheLine, stopLight);
         }
     }
 
-    private void checkBroadcastingRed(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+    private void broadcastingRedAction(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
         for (Vehicle vehicle : vehiclesInTheLine) {
             if (stopLight.isBroadcastingRed()) {
                 assignRedLightToVehicle(stopLight, vehicle);
@@ -97,7 +97,7 @@ class Simulation {
         }
     }
 
-    private void checkBroadcastingGreen(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
+    private void broadcastingGreenAction(List<Vehicle> vehiclesInTheLine, StopLight stopLight) {
         if (stopLight.isBroadcastingGreen()) {
             assignGreenLightToVehicles(vehiclesInTheLine, stopLight);
         }
