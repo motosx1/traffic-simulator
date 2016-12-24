@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.roadobjects.RoadObject;
 
 @ToString
 public class Scenario {

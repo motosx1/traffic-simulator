@@ -1,7 +1,6 @@
 package pl.zablocki.core.roadobjects;
 
 import lombok.Getter;
-import pl.zablocki.core.road.RoadObject;
 
 import java.awt.*;
 

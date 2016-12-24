@@ -2,13 +2,10 @@ package pl.zablocki.viewer;
 
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.roadobjects.*;
 import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
-import pl.zablocki.core.roadobjects.StopLight;
-import pl.zablocki.core.roadobjects.Vehicle;
-import pl.zablocki.core.roadobjects.ObjectType;
 import pl.zablocki.viewer.panels.MainFrame;
 
 import java.util.ArrayList;
@@ -83,22 +80,16 @@ public class AppViewer {
         lines.add(line4);
 
         // standing obstacle
-        RoadObject standingObstacle = new RoadObject();
+        RoadObject standingObstacle = new Obstacle();
         standingObstacle.setPosition(1200);
-        standingObstacle.setMaxSpeed(0);
-        standingObstacle.setSpeed(0);
-        standingObstacle.setObjectType(ObjectType.OBSTACLE);
         line2.getVehicles().add(new Vehicle(66, standingObstacle, null));
         // standing obstacle
-        RoadObject standingObstacle2 = new RoadObject();
+        RoadObject standingObstacle2 = new Obstacle();
         standingObstacle2.setPosition(1175);
-        standingObstacle2.setMaxSpeed(0);
-        standingObstacle2.setSpeed(0);
-        standingObstacle2.setObjectType(ObjectType.OBSTACLE);
         line3.getVehicles().add(new Vehicle(66, standingObstacle2, null));
         //
 
-        RoadObject typicalVehicleData = new RoadObject();
+        RoadObject typicalVehicleData = new Vehicle();
         typicalVehicleData.setAcceleration(2.2);
         typicalVehicleData.setMaxAcceleration(2.2);
         typicalVehicleData.setSpeed(35);

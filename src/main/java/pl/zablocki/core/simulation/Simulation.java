@@ -3,7 +3,7 @@ package pl.zablocki.core.simulation;
 import pl.zablocki.core.model.LineChangeModel;
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.road.RoadObject;
+import pl.zablocki.core.roadobjects.RoadObject;
 import pl.zablocki.core.roadobjects.ObjectType;
 import pl.zablocki.core.roadobjects.StopLight;
 import pl.zablocki.core.roadobjects.Vehicle;
@@ -30,8 +30,8 @@ class Simulation {
                 List<Vehicle> vehiclesInTheLine = line.getVehicles();
                 StopLight stopLight = line.getStopLight();
 
-                changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
                 deleteNotActiveVehicles(line);
+                changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
                 decideToChangeLine(elapsedTime, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);

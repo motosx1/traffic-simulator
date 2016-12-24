@@ -6,7 +6,6 @@ import lombok.ToString;
 import pl.zablocki.core.model.AccelerationModel;
 import pl.zablocki.core.model.GippsModel;
 import pl.zablocki.core.road.Line;
-import pl.zablocki.core.road.RoadObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,8 @@ public class Vehicle extends RoadObject {
     @Getter
     private double lastLineChange;
 
+    public Vehicle(){}
+
     public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
         this.id = id;
         this.objectInFront = objectInFront;
@@ -38,7 +39,7 @@ public class Vehicle extends RoadObject {
         setMaxAcceleration(vehicleParams.getMaxAcceleration());
         setSpeed(vehicleParams.getSpeed());
         setMaxSpeed(vehicleParams.getMaxSpeed());
-        setBreakingRappidness(vehicleParams.getBreakingRappidness());
+        setBreakingRappidness(vehicleParams.getBreakingRapidness());
         setPosition(vehicleParams.getPosition());
         setObjectType(vehicleParams.getObjectType() == null ? ObjectType.NORMAL : vehicleParams.getObjectType());
     }
@@ -61,7 +62,7 @@ public class Vehicle extends RoadObject {
         double tLocal = 1;
         double v0Local = getMaxSpeed();
         double aLocal = getMaxAcceleration();
-        double bParam = getBreakingRappidness();
+        double bParam = getBreakingRapidness();
 
         // actual Gipps formula
         return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, bParam, getMinimumGap());
@@ -178,7 +179,7 @@ public class Vehicle extends RoadObject {
         double aLocal = getMaxAcceleration();
 
         // actual Gipps formula
-        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRappidness(), getMinimumGap());
+        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRapidness(), getMinimumGap());
 
     }
 

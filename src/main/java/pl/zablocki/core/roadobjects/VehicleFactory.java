@@ -2,7 +2,6 @@ package pl.zablocki.core.roadobjects;
 
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.road.RoadObject;
 
 import java.util.HashMap;
 import java.util.List;

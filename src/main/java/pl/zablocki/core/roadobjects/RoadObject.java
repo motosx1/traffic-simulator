@@ -1,10 +1,9 @@
-package pl.zablocki.core.road;
+package pl.zablocki.core.roadobjects;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.zablocki.core.roadobjects.ObjectType;
 
-public class RoadObject {
+public abstract class RoadObject {
     @Getter
     @Setter
     private double acceleration;
@@ -24,12 +23,12 @@ public class RoadObject {
     @Setter
     private double length = 20;
     @Setter
-    private double breakingRappidness;
+    private double breakingRapidness;
     @Getter
     @Setter
     private ObjectType objectType;
 
-    public double getBreakingRappidness() {
+    public double getBreakingRapidness() {
         if( objectType == ObjectType.AUTONOMOUS) {
             return 1;
         }
