@@ -1,6 +1,7 @@
 package pl.zablocki.core.roadobjects;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
@@ -14,15 +15,16 @@ public class StopLight extends RoadObject{
     private boolean broadcastingGreen = false;
     @Getter
     private Color color = Color.RED;
-    @Getter
+    @Getter @Setter
     private int greenLightTimeSec;
-    @Getter
+    @Getter @Setter
     private int redLightTimeSec;
 
     public StopLight(double position) {
         greenLightTimeSec = 10;
         redLightTimeSec = 10;
         setPosition(position);
+        setObjectType(ObjectType.STOPLIGHT);
     }
 
     public boolean isVehicleInRange(Vehicle vehicle) {

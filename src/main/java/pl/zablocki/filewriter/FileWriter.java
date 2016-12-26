@@ -1,4 +1,4 @@
-package pl.zablocki.core.simulation;
+package pl.zablocki.filewriter;
 
 public class FileWriter { //implements VehicleDataListener
 

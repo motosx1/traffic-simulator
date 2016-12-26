@@ -126,7 +126,6 @@ class Simulation {
     }
 
     private boolean forceCreate = false;
-
     private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line, Road road) {
         Vehicle newVehicle = null;
         if (forceCreate || isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {

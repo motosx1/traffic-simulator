@@ -20,17 +20,14 @@ public class Vehicle extends RoadObject {
     private RoadObject objectInFront;
     @Setter
     @Getter
-    private AccelerationModel accelerationModel;
-    @Setter
-    @Getter
     private double lastLineChange;
 
-    public Vehicle(){}
+    public Vehicle() {
+    }
 
     public Vehicle(Integer id, RoadObject vehicleParams, Vehicle objectInFront) {
         this.id = id;
         this.objectInFront = objectInFront;
-        this.accelerationModel = new GippsModel();
         setVehicleParams(vehicleParams);
     }
 
@@ -42,6 +39,13 @@ public class Vehicle extends RoadObject {
         setBreakingRapidness(vehicleParams.getBreakingRapidness());
         setPosition(vehicleParams.getPosition());
         setObjectType(vehicleParams.getObjectType() == null ? ObjectType.NORMAL : vehicleParams.getObjectType());
+
+        AccelerationModel accelerationModel = vehicleParams.getAccelerationModel();
+        if (accelerationModel == null) {
+            setAccelerationModel(new GippsModel());
+        }else {
+            setAccelerationModel(accelerationModel);
+        }
     }
 
     public void updateParameters(double timeElapsed) {
@@ -64,8 +68,7 @@ public class Vehicle extends RoadObject {
         double aLocal = getMaxAcceleration();
         double bParam = getBreakingRapidness();
 
-        // actual Gipps formula
-        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, bParam, getMinimumGap());
+        return getAccelerationModel().acc(s, v, dv, accLead, tLocal, v0Local, aLocal, bParam, getMinimumGap());
 
     }
 
@@ -178,8 +181,7 @@ public class Vehicle extends RoadObject {
         double v0Local = getMaxSpeed();
         double aLocal = getMaxAcceleration();
 
-        // actual Gipps formula
-        return accelerationModel.acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRapidness(), getMinimumGap());
+        return getAccelerationModel().acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRapidness(), getMinimumGap());
 
     }
 
