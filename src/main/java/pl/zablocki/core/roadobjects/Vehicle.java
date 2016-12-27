@@ -63,12 +63,11 @@ public class Vehicle extends RoadObject {
         double v = getSpeed();
         double dv = getRelativeSpeed();
         double accLead = getObjectsInFrontAcc();
-        double tLocal = 1;
         double v0Local = getMaxSpeed();
         double aLocal = getMaxAcceleration();
         double bParam = getBreakingRapidness();
 
-        return getAccelerationModel().acc(s, v, dv, accLead, tLocal, v0Local, aLocal, bParam, getMinimumGap());
+        return getAccelerationModel().acc(s, v, dv, accLead, v0Local, aLocal, bParam, getMinimumGap());
 
     }
 
@@ -177,11 +176,10 @@ public class Vehicle extends RoadObject {
         double v = getSpeed();
         double dv = simulateGetRelativeSpeed(vehicleInFront);
         double accLead = simulateGetObjectsInFrontAcc(vehicleInFront);
-        double tLocal = 1;
         double v0Local = getMaxSpeed();
         double aLocal = getMaxAcceleration();
 
-        return getAccelerationModel().acc(s, v, dv, accLead, tLocal, v0Local, aLocal, getBreakingRapidness(), getMinimumGap());
+        return getAccelerationModel().acc(s, v, dv, accLead, v0Local, aLocal, getBreakingRapidness(), getMinimumGap());
 
     }
 
