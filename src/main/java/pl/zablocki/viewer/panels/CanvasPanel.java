@@ -32,9 +32,15 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         repaint();
     }
 
+    @Override
     public void updateRoadObjects(RoadData roadData) {
         this.roadData = roadData;
         repaint();
+    }
+
+    @Override
+    public void sendEndSignal() {
+
     }
 
 

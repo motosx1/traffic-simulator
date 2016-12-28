@@ -14,7 +14,7 @@ import java.util.Map;
 @ToString
 public class Vehicle extends RoadObject {
 
-    @Getter
+    @Getter @Setter
     private Integer id;
     @Setter
     private RoadObject objectInFront;

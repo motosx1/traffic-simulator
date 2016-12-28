@@ -12,10 +12,17 @@ public class SimulationRunnable implements Runnable {
     private Simulation simulation;
     private List<VehicleDataListener> listeners = new ArrayList<>();
     private ParamsSingleton params = ParamsSingleton.getInstance();
+    private double threadSleepTime = params.getThreadSleep();
 
 
     public SimulationRunnable(Scenarios scenarios) {
         this.scenarios = scenarios;
+        prepareSimulation();
+    }
+
+    public SimulationRunnable(Scenarios scenarios, double sleepTime) {
+        this.scenarios = scenarios;
+        threadSleepTime = sleepTime;
         prepareSimulation();
     }
 
@@ -27,10 +34,12 @@ public class SimulationRunnable implements Runnable {
         while (elapsedTime < scenarios.getSimulationDuration()) {
             RoadData roadData = simulation.doStep(dt, elapsedTime);
             roadData.getSimulationStatistics().setElapsedTime(elapsedTime);
+            roadData.setSimulationDuration(scenarios.getSimulationDuration());
             notifyListeners(roadData);
             sleep();
             elapsedTime += dt;
         }
+        notifyListenersEnd();
     }
 
     public void addListener(VehicleDataListener vehicleDataListener) {
@@ -43,13 +52,18 @@ public class SimulationRunnable implements Runnable {
         );
     }
 
+    private void notifyListenersEnd() {
+        listeners.forEach(VehicleDataListener::sendEndSignal);
+    }
+
+
     private void prepareSimulation() {
         this.simulation = new Simulation(scenarios);
     }
 
     private void sleep() {
         try {
-            Thread.sleep((long) params.getThreadSleep());
+            Thread.sleep((long) threadSleepTime);
         } catch (InterruptedException e) {
             System.err.println(e);
         }

@@ -13,4 +13,6 @@ public class RoadData {
     private List<Road> roads = new ArrayList<>();
     @Getter
     private SimulationStatistics simulationStatistics = new SimulationStatistics();
+    @Getter @Setter
+    private Double simulationDuration;
 }
