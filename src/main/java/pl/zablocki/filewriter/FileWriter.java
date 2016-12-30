@@ -63,13 +63,11 @@ class FileWriter implements VehicleDataListener {
     private String createFileContent(TreeMap<Double, Road> roadMap) {
         String fileContent = "";
 
-        Integer localMaxVehicleId;
         if (maxVehicleId == null) {
-            localMaxVehicleId = roadMap.lastEntry().getValue().getLines().stream().flatMap(line -> line.getVehicles().stream()).max(Comparator.comparingInt(Vehicle::getId)).orElse(null).getId();
-            maxVehicleId = localMaxVehicleId;
-        }
-        else {
-            localMaxVehicleId = maxVehicleId;
+            maxVehicleId = roadMap.lastEntry().getValue().getLines().stream().flatMap(line -> line.getVehicles().stream())
+                    .filter(vehicle -> vehicle.getObjectType() == ObjectType.AUTONOMOUS || vehicle.getObjectType() == ObjectType.NORMAL)
+                    .max(Comparator.comparingInt(Vehicle::getId)).orElse(null)
+                    .getId();
         }
 
 
@@ -77,10 +75,9 @@ class FileWriter implements VehicleDataListener {
             Double elapsedTime = entry.getKey();
             Road road = entry.getValue();
 
-            fileContent += createFileEntry(elapsedTime, road, localMaxVehicleId);
+            fileContent += createFileEntry(elapsedTime, road, maxVehicleId);
         }
 
-//         fileContent += createHeader();
 
         return fileContent;
     }
