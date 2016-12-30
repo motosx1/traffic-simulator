@@ -1,7 +1,7 @@
 package pl.zablocki.xml;
 
 import pl.zablocki.core.model.AccelerationModel;
-import pl.zablocki.core.model.GippsModel;
+import pl.zablocki.core.model.IDModel;
 import pl.zablocki.core.roadobjects.RoadObject;
 import pl.zablocki.core.roadobjects.Vehicle;
 
@@ -127,10 +127,10 @@ public class XmlReader {
 
     private static AccelerationModel getAccelerationModel(AccelerationModelType accelerationModelType) {
         if (accelerationModelType == AccelerationModelType.GIPPS) {
-            return new GippsModel();
+            return new IDModel();
         }
 
-        return new GippsModel();
+        return new IDModel();
     }
 
     private static Scenario createNewScenario(int roadId, int autonomousPercentage) {

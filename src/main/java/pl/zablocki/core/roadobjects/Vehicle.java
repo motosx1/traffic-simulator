@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import pl.zablocki.core.model.AccelerationModel;
-import pl.zablocki.core.model.GippsModel;
+import pl.zablocki.core.model.IDModel;
 import pl.zablocki.core.road.Line;
 
 import java.util.HashMap;
@@ -42,19 +42,19 @@ public class Vehicle extends RoadObject {
 
         AccelerationModel accelerationModel = vehicleParams.getAccelerationModel();
         if (accelerationModel == null) {
-            setAccelerationModel(new GippsModel());
+            setAccelerationModel(new IDModel());
         }else {
             setAccelerationModel(accelerationModel);
         }
     }
 
-    public void updateParameters(double timeElapsed) {
+    public void updateParameters(double dt) {
         double calculatedNewAcc = calcAcc();
         setAcceleration(calculatedNewAcc);
-        double speed = getSpeed() + getAcceleration() * timeElapsed;
+        double speed = getSpeed() + getAcceleration() * dt;
         speed = validateSpeed(speed);
         setSpeed(speed);
-        double newPosition = getPosition() + (getSpeed() * timeElapsed) + (getAcceleration() * Math.sqrt(timeElapsed) * 0.5);
+        double newPosition = getPosition() + (getSpeed() * dt) + (getAcceleration() * Math.sqrt(dt) * 0.5);
         setPosition(newPosition);
     }
 
