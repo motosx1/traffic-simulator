@@ -3,11 +3,7 @@ package pl.zablocki.core.simulation;
 import pl.zablocki.core.model.LineChangeModel;
 import pl.zablocki.core.road.Line;
 import pl.zablocki.core.road.Road;
-import pl.zablocki.core.roadobjects.RoadObject;
-import pl.zablocki.core.roadobjects.ObjectType;
-import pl.zablocki.core.roadobjects.StopLight;
-import pl.zablocki.core.roadobjects.Vehicle;
-import pl.zablocki.core.roadobjects.VehicleFactory;
+import pl.zablocki.core.roadobjects.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +13,7 @@ import java.util.stream.Collectors;
 class Simulation {
 
     private Scenarios scenarios;
+    private Map<Road, Integer> vehiclesDeleted = new HashMap<>();
 
     Simulation(Scenarios scenarios) {
         this.scenarios = scenarios;
@@ -30,12 +27,14 @@ class Simulation {
                 List<Vehicle> vehiclesInTheLine = line.getVehicles();
                 StopLight stopLight = line.getStopLight();
 
-                deleteNotActiveVehicles(line);
+                deleteNotActiveVehicles(line, road);
                 changeStopLight(dt, elapsedTime, vehiclesInTheLine, stopLight);
                 decideToChangeLine(elapsedTime, road);
                 updateVehiclesParameters(dt, vehiclesInTheLine);
                 createAndAddToLineNewVehicle(dt, elapsedTime, scenario, line, road);
             }
+
+            road.setVehiclesDeleted(vehiclesDeleted.get(road));
         }
 
 
@@ -66,9 +65,14 @@ class Simulation {
         return roadData;
     }
 
-    private void deleteNotActiveVehicles(Line line) {
+    private void deleteNotActiveVehicles(Line line, Road road) {
         List<Vehicle> notActiveVehicles = line.getVehicles().stream().filter(vehicle -> vehicle.getPosition() > 1800).collect(Collectors.toList());
         line.getVehicles().removeAll(notActiveVehicles);
+
+        vehiclesDeleted.putIfAbsent(road, 0);
+        Integer deletedAmount = vehiclesDeleted.get(road);
+        deletedAmount += notActiveVehicles.size();
+        vehiclesDeleted.put(road,deletedAmount);
     }
 
     private void decideToChangeLine(double elapsedTime, Road road) {
@@ -126,6 +130,7 @@ class Simulation {
     }
 
     private boolean forceCreate = false;
+
     private void createAndAddToLineNewVehicle(double dt, double elapsedTime, Scenario scenario, Line line, Road road) {
         Vehicle newVehicle = null;
         if (forceCreate || isTimeTo(line.getCarsPerHour(), dt, elapsedTime)) {

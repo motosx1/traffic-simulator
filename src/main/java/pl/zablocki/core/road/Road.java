@@ -19,6 +19,9 @@ public class Road{
     @Setter
     private double autonomousPercentage;
 
+    @Getter @Setter
+    private int vehiclesDeleted;
+
     public Road(int id) {
         this.id = id;
     }

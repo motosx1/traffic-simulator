@@ -108,7 +108,7 @@ class FileWriter implements VehicleDataListener {
         fileLine.setTimeElapsed(elapsedTime);
         fileLine.setRoadId(road.getId());
         fileLine.setVehiclesStopped(stoppedVehicles.size());
-        // TODO fileLine.setVehiclesPassed();
+        fileLine.setVehiclesPassed(road.getVehiclesDeleted());
         fileLine.setAverageSpeed(sumSpeed / (double) allVehicles.size());
         fileLine.setVehicleFileParams(vehicleFileParams);
 
@@ -170,6 +170,7 @@ class FileWriter implements VehicleDataListener {
             Road clonedRoad = new Road(road.getId());
             clonedRoad.setAutonomousPercentage(road.getAutonomousPercentage());
             clonedRoad.vehicleCounter = road.vehicleCounter;
+            clonedRoad.setVehiclesDeleted(road.getVehiclesDeleted());
 
             ArrayList<Line> clonedLines = new ArrayList<>();
             for (Line line : road.getLines()) {

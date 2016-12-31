@@ -83,7 +83,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         SimulationStatistics simulationStatistics = roadData.getSimulationStatistics();
 
         drawAverageSpeed(g2, simulationStatistics.getAverageSpeed());
-        drawStoppedVehiclesAmount(g2, simulationStatistics.getStoppedVehicles());
+        drawStoppedAndDeletedVehiclesAmount(g2, simulationStatistics.getStoppedVehicles());
     }
 
     private void drawAverageSpeed(Graphics2D g2, Map<Road, Double> averageSpeedMap) {
@@ -96,13 +96,18 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
         }
     }
 
-    private void drawStoppedVehiclesAmount(Graphics2D g2, Map<Road, Integer> stoppedVehiclesMap) {
+    private void drawStoppedAndDeletedVehiclesAmount(Graphics2D g2, Map<Road, Integer> stoppedVehiclesMap) {
         for (Map.Entry<Road, Integer> entry : stoppedVehiclesMap.entrySet()) {
             Road road = entry.getKey();
             Integer stoppedVehicles = entry.getValue();
+            int vehiclesDeleted = road.getVehiclesDeleted();
 
             int textPositionY = getLinePostitionY(0, road.getId()) - 18;
             g2.drawString("stopped vehicles: " + stoppedVehicles, getStatisticsBoxX(), textPositionY);
+
+            textPositionY -= 14;
+            g2.drawString("deleted vehicles: " + vehiclesDeleted, getStatisticsBoxX(), textPositionY);
+
         }
     }
 
