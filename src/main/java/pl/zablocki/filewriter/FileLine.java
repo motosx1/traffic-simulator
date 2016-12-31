@@ -30,6 +30,17 @@ class FileLine{
 
    }
 
+    String getSimpleCsvString() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String timeString = df.format(timeElapsed);
+        return  timeString + ";" +
+                roadId + ";" +
+                averageSpeed + ";" +
+                vehiclesStopped + ";" +
+                vehiclesPassed + ";";
+
+    }
+
     private String createLastSemicolons(int maxId, int lastId) {
        String result = "";
         for (int i = 0; i < maxId-lastId; i++) {
@@ -56,4 +67,6 @@ class FileLine{
         return result;
 
     }
+
+
 }

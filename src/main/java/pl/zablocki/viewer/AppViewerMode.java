@@ -33,7 +33,7 @@ public class AppViewerMode {
     }
 
     private Scenarios loadScenarios() {
-        String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\inputData2.xml";
+        String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\inputData3.xml";
         return XmlReader.getScenariosFromXml(filePath);
 
     }

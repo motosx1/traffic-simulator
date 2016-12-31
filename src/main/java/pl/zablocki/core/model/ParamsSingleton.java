@@ -10,7 +10,7 @@ public class ParamsSingleton {
 
     @Getter
     @Setter
-    private double threadSleep = 40;
+    private double threadSleep = 10;
     @Getter
     @Setter
     private double dt = 0.2;
