@@ -99,6 +99,7 @@ class FileWriter implements VehicleDataListener {
             params.setVehAcc(vehicle.getAcceleration());
             params.setVehPos(vehicle.getPosition());
             params.setVehSpeed(vehicle.getSpeed());
+            params.setWithAcc(vehicle.getObjectType() == ObjectType.AUTONOMOUS);
 
             vehicleFileParams.put(vehicle.getId(), params);
         }
@@ -144,7 +145,7 @@ class FileWriter implements VehicleDataListener {
 
         result += "elapsedTime;roadId;averageSpeed;vehiclesStopped;vehiclesPassed;";
         for (int i = 0; i <= maxVehicleId; i++) {
-            result += "vehPos" + i + ";vehSpeed" + i + ";vehAcc" + i + ";";
+            result += "isWithACC;" + "vehPos" + i + ";vehSpeed" + i + ";vehAcc" + i + ";";
         }
 
         return result + "\n";

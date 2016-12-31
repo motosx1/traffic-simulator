@@ -33,7 +33,7 @@ class FileLine{
     private String createLastSemicolons(int maxId, int lastId) {
        String result = "";
         for (int i = 0; i < maxId-lastId; i++) {
-            result+=";;;";
+            result+=";;;;";
         }
         return result;
     }
@@ -44,13 +44,13 @@ class FileLine{
         int firstVehId = vehicleFileParams.firstKey();
 
         for (int i = 0; i < firstVehId; i++) {
-            result += ";;;";
+            result += ";;;;";
         }
 
         for (Map.Entry<Integer, VehicleFileParams> entry : vehicleFileParams.entrySet()) {
             VehicleFileParams param = entry.getValue();
             //entry.getKey() + "->" +
-            result +=  param.getVehPos() + ";" + param.getVehSpeed() + ";" + param.getVehAcc() + ";";
+            result +=  param.isWithAcc() + ";" + param.getVehPos() + ";" + param.getVehSpeed() + ";" + param.getVehAcc() + ";";
         }
 
         return result;
