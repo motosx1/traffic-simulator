@@ -26,7 +26,6 @@ class FileWriter implements VehicleDataListener {
         RoadData clonedRoadData = cloneRoadData(roadData);
 
         double elapsedTime = clonedRoadData.getSimulationStatistics().getElapsedTime();
-//        lastTime = elapsedTime;
         if (simulationData.get(elapsedTime) != null) {
             System.out.println("ups");
         }

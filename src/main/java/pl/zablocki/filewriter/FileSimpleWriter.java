@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 class FileSimpleWriter implements VehicleDataListener {
 
     private Map<Double, RoadData> simulationData = new TreeMap<>();
-    private Integer maxVehicleId = null;
+    private String pathCore;
 
     @Override
     public void updateRoadObjects(RoadData roadData) {
@@ -53,6 +53,7 @@ class FileSimpleWriter implements VehicleDataListener {
         long tStart = System.currentTimeMillis();
         System.out.println("Zapisywanie danych do pliku...");
         writeDataToFile(finalRoadsData);
+        createCombinedFiles(finalRoadsData);
         long tEnd = System.currentTimeMillis();
         long tDelta = tEnd - tStart;
         double elapsedSeconds = tDelta / 1000.0;
@@ -63,26 +64,17 @@ class FileSimpleWriter implements VehicleDataListener {
     private String createFileContent(TreeMap<Double, Road> roadMap) {
         String fileContent = "";
 
-        if (maxVehicleId == null) {
-            maxVehicleId = roadMap.lastEntry().getValue().getLines().stream().flatMap(line -> line.getVehicles().stream())
-                    .filter(vehicle -> vehicle.getObjectType() == ObjectType.AUTONOMOUS || vehicle.getObjectType() == ObjectType.NORMAL)
-                    .max(Comparator.comparingInt(Vehicle::getId)).orElse(null)
-                    .getId();
-        }
-
-
         for (Map.Entry<Double, Road> entry : roadMap.entrySet()) {
             Double elapsedTime = entry.getKey();
             Road road = entry.getValue();
 
-            fileContent += createFileEntry(elapsedTime, road, maxVehicleId);
+            fileContent += createFileEntry(elapsedTime, road);
         }
-
 
         return fileContent;
     }
 
-    private String createFileEntry(Double elapsedTime, Road road, Integer maxVehicleId) {
+    private String createFileEntry(Double elapsedTime, Road road) {
         List<Vehicle> allVehicles = road.getLines().stream()
                 .flatMap(line -> line.getVehicles().stream())
                 .filter(vehicle -> vehicle.getObjectType() == ObjectType.AUTONOMOUS || vehicle.getObjectType() == ObjectType.NORMAL)
@@ -92,17 +84,6 @@ class FileSimpleWriter implements VehicleDataListener {
                 .collect(Collectors.toList());
         double sumSpeed = allVehicles.stream().mapToDouble(Vehicle::getSpeed).sum();
 
-//        TreeMap<Integer, VehicleFileParams> vehicleFileParams = new TreeMap<>();
-
-//        for (Vehicle vehicle : allVehicles) {
-//            VehicleFileParams params = new VehicleFileParams();
-//            params.setVehAcc(vehicle.getAcceleration());
-//            params.setVehPos(vehicle.getPosition());
-//            params.setVehSpeed(vehicle.getSpeed());
-//            params.setWithAcc(vehicle.getObjectType() == ObjectType.AUTONOMOUS);
-//
-//            vehicleFileParams.put(vehicle.getId(), params);
-//        }
 
         FileLine fileLine = new FileLine();
         fileLine.setTimeElapsed(elapsedTime);
@@ -110,7 +91,6 @@ class FileSimpleWriter implements VehicleDataListener {
         fileLine.setVehiclesStopped(stoppedVehicles.size());
         fileLine.setVehiclesPassed(road.getVehiclesDeleted());
         fileLine.setAverageSpeed(sumSpeed / (double) allVehicles.size());
-//        fileLine.setVehicleFileParams(vehicleFileParams);
 
         return fileLine.getSimpleCsvString() + "\n";
     }
@@ -123,10 +103,11 @@ class FileSimpleWriter implements VehicleDataListener {
             Road road = roadMapEntry.getKey();
             TreeMap<Double, Road> timeRoadMap = roadMapEntry.getValue();
 
-            String path = "results/result-" + formatDateTime + "_" + road.getId() + ".csv";
+            pathCore = "results/result-" + formatDateTime + "_";
+            String path = pathCore + road.getId() + ".csv";
 
             String text = createFileContent(timeRoadMap);
-            text = createSimpleHeader() + text;
+            text = createSimpleHeader(road.getAutonomousPercentage()) + text;
 
 
             try {
@@ -140,10 +121,50 @@ class FileSimpleWriter implements VehicleDataListener {
 
     }
 
-    private String createSimpleHeader() {
+    private void createCombinedFiles(Map<Road, TreeMap<Double, Road>> finalData) {
+        String pathCombined = pathCore + "combined" + ".csv";
+        Map<Integer, String> filesCombined = new TreeMap<>();
+
+        for (Map.Entry<Road, TreeMap<Double, Road>> roadMapEntry : finalData.entrySet()) {
+            Road road = roadMapEntry.getKey();
+
+
+            String pathFirst = pathCore + road.getId() + ".csv";
+
+            try {
+                List<String> file = Files.lines(Paths.get(pathFirst)).collect(Collectors.toList());
+
+                for (int i = 0; i < file.size(); i++) {
+                    filesCombined.putIfAbsent(i, "");
+                    filesCombined.put(i, filesCombined.get(i) + file.get(i));
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            createNewFile(pathCombined);
+            String res = "";
+
+            for (Map.Entry<Integer, String> entry : filesCombined.entrySet()) {
+                String value = entry.getValue();
+                res += value + "\n";
+            }
+
+            Files.write(Paths.get(pathCombined), res.getBytes());
+        } catch (IOException e) {
+            System.err.println("Failed to save a file!");
+            e.printStackTrace();
+        }
+
+    }
+
+    private String createSimpleHeader(double autonomousPercentage) {
         String result = "";
 
-        result += "elapsedTime;roadId;averageSpeed;vehiclesStopped;vehiclesPassed;";
+        result += "elapsedTime;roadId;averageSpeed_"+autonomousPercentage+";vehiclesStopped_"+autonomousPercentage+";vehiclesPassed_"+autonomousPercentage+";";
 
         return result + "\n";
     }

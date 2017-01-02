@@ -5,14 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class ParamsSingleton {
-
     private static ParamsSingleton instance = null;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private double threadSleep = 10;
-    @Getter
-    @Setter
+    @Getter @Setter
     private double dt = 0.2;
 
     private ParamsSingleton() {

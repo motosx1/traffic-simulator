@@ -1,16 +1,9 @@
 package pl.zablocki.viewer;
 
-import pl.zablocki.core.road.Line;
-import pl.zablocki.core.road.Road;
-import pl.zablocki.core.roadobjects.*;
-import pl.zablocki.core.simulation.Scenario;
 import pl.zablocki.core.simulation.Scenarios;
 import pl.zablocki.core.simulation.SimulationRunnable;
 import pl.zablocki.viewer.panels.MainFrame;
 import pl.zablocki.xml.XmlReader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AppViewerMode {
 
@@ -33,7 +26,7 @@ public class AppViewerMode {
     }
 
     private Scenarios loadScenarios() {
-        String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\inputData3.xml";
+        String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\thesis1.xml";
         return XmlReader.getScenariosFromXml(filePath);
 
     }

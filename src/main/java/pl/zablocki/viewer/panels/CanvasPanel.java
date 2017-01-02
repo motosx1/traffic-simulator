@@ -40,7 +40,7 @@ public class CanvasPanel extends JPanel implements VehicleDataListener {
 
     @Override
     public void sendEndSignal() {
-
+        System.out.println("Symulacja została zakończona");
     }
 
 

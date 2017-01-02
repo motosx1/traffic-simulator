@@ -5,12 +5,11 @@
             <autonomousPercentage>100.0</autonomousPercentage>
             <line id="0">
                 <carsPerHour>2000.0</carsPerHour>
-            </line>
-            <line id="1">
-                <carsPerHour>800.0</carsPerHour>
-                <obstacle>
-                    <position>1000</position>
-                </obstacle>
+                <stopLight>
+                    <greenLightTimeSec>10</greenLightTimeSec>
+                    <position>1600</position>
+                    <redLightTimeSec>20</redLightTimeSec>
+                </stopLight>
             </line>
         </road>
         <typicalVehicle>
@@ -20,20 +19,19 @@
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
             <position>0.0</position>
-            <speed>35.0</speed>
+            <speed>40.0</speed>
         </typicalVehicle>
     </scenario>
     <scenario>
         <road id="1">
-            <autonomousPercentage>80.0</autonomousPercentage>
+            <autonomousPercentage>70.0</autonomousPercentage>
             <line id="0">
                 <carsPerHour>2000.0</carsPerHour>
-            </line>
-            <line id="1">
-                <carsPerHour>800.0</carsPerHour>
-                <obstacle>
-                    <position>1000</position>
-                </obstacle>
+                <stopLight>
+                    <greenLightTimeSec>10</greenLightTimeSec>
+                    <position>1600</position>
+                    <redLightTimeSec>20</redLightTimeSec>
+                </stopLight>
             </line>
         </road>
         <typicalVehicle>
@@ -43,20 +41,19 @@
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
             <position>0.0</position>
-            <speed>35.0</speed>
+            <speed>40.0</speed>
         </typicalVehicle>
     </scenario>
     <scenario>
         <road id="2">
-            <autonomousPercentage>60.0</autonomousPercentage>
+            <autonomousPercentage>30.0</autonomousPercentage>
             <line id="0">
                 <carsPerHour>2000.0</carsPerHour>
-            </line>
-            <line id="1">
-                <carsPerHour>800.0</carsPerHour>
-                <obstacle>
-                    <position>1000</position>
-                </obstacle>
+                <stopLight>
+                    <greenLightTimeSec>10</greenLightTimeSec>
+                    <position>1600</position>
+                    <redLightTimeSec>20</redLightTimeSec>
+                </stopLight>
             </line>
         </road>
         <typicalVehicle>
@@ -66,7 +63,7 @@
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
             <position>0.0</position>
-            <speed>35.0</speed>
+            <speed>40.0</speed>
         </typicalVehicle>
     </scenario>
     <scenario>
@@ -74,12 +71,11 @@
             <autonomousPercentage>0.0</autonomousPercentage>
             <line id="0">
                 <carsPerHour>2000.0</carsPerHour>
-            </line>
-            <line id="1">
-                <carsPerHour>800.0</carsPerHour>
-                <obstacle>
-                    <position>1000</position>
-                </obstacle>
+                <stopLight>
+                    <greenLightTimeSec>10</greenLightTimeSec>
+                    <position>1600</position>
+                    <redLightTimeSec>20</redLightTimeSec>
+                </stopLight>
             </line>
         </road>
         <typicalVehicle>
@@ -89,8 +85,8 @@
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
             <position>0.0</position>
-            <speed>35.0</speed>
+            <speed>40.0</speed>
         </typicalVehicle>
     </scenario>
-    <simulationDuration>2000.0</simulationDuration>
+    <simulationDuration>1000.0</simulationDuration>
 </scenarios>

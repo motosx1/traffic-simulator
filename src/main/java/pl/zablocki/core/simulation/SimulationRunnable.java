@@ -6,7 +6,7 @@ import pl.zablocki.core.roadobjects.VehicleDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationRunnable implements Runnable {
+public class SimulationRunnable implements Runnable, Observable {
 
     private Scenarios scenarios;
     private Simulation simulation;
@@ -42,17 +42,20 @@ public class SimulationRunnable implements Runnable {
         notifyListenersEnd();
     }
 
+    @Override
     public void addListener(VehicleDataListener vehicleDataListener) {
         listeners.add(vehicleDataListener);
     }
 
-    private void notifyListeners(RoadData roadData) {
+    @Override
+    public void notifyListeners(RoadData roadData) {
         listeners.forEach(listener ->
                 listener.updateRoadObjects(roadData)
         );
     }
 
-    private void notifyListenersEnd() {
+    @Override
+    public void notifyListenersEnd() {
         listeners.forEach(VehicleDataListener::sendEndSignal);
     }
 
