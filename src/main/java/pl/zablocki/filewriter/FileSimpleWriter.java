@@ -103,7 +103,7 @@ class FileSimpleWriter implements VehicleDataListener {
             Road road = roadMapEntry.getKey();
             TreeMap<Double, Road> timeRoadMap = roadMapEntry.getValue();
 
-            pathCore = "results/result-" + formatDateTime + "_";
+            pathCore = "results/s3result-" + formatDateTime + "_";
             String path = pathCore + road.getId() + ".csv";
 
             String text = createFileContent(timeRoadMap);

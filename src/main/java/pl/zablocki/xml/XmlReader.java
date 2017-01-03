@@ -126,7 +126,7 @@ public class XmlReader {
     }
 
     private static AccelerationModel getAccelerationModel(AccelerationModelType accelerationModelType) {
-        if (accelerationModelType == AccelerationModelType.GIPPS) {
+        if (accelerationModelType == AccelerationModelType.IDM) {
             return new IDModel();
         }
 

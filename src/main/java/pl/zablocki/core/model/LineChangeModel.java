@@ -61,6 +61,6 @@ public class LineChangeModel {
     }
 
     private static List<Line> getAvailableLines(Line currentLine, List<Line> lines) {
-        return lines.stream().filter(line -> !line.equals(currentLine)).collect(Collectors.toList());
+        return lines.stream().filter(line -> !line.equals(currentLine) && ( currentLine.getId()+1 == line.getId() || currentLine.getId()-1 == line.getId()) ).collect(Collectors.toList());
     }
 }

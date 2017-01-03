@@ -24,7 +24,7 @@ public class FileSimpleWriterMode {
         }
 
         private Scenarios loadScenarios() {
-            String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\thesis1.xml";
+            String filePath = "C:\\Users\\Bartosz\\IdeaProjects\\TrafficSimulator\\inputData\\thesis3.xml";
             return XmlReader.getScenariosFromXml(filePath);
         }
 }

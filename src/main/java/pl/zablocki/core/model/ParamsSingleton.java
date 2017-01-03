@@ -8,7 +8,7 @@ public class ParamsSingleton {
     private static ParamsSingleton instance = null;
 
     @Getter @Setter
-    private double threadSleep = 10;
+    private double threadSleep = 40;
     @Getter @Setter
     private double dt = 0.2;
 

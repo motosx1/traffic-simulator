@@ -4,17 +4,21 @@
         <road id="0">
             <autonomousPercentage>100.0</autonomousPercentage>
             <line id="0">
+                <carsPerHour>1400.0</carsPerHour>
+            </line>
+            <line id="1">
                 <carsPerHour>2000.0</carsPerHour>
-                <stopLight>
-                    <greenLightTimeSec>10</greenLightTimeSec>
-                    <position>1600</position>
-                    <redLightTimeSec>20</redLightTimeSec>
-                </stopLight>
+            </line>
+            <line id="2">
+                <carsPerHour>2000.0</carsPerHour>
+                <obstacle>
+                    <position>1260</position>
+                </obstacle>
             </line>
         </road>
         <typicalVehicle>
             <acceleration>2.2</acceleration>
-            <accelerationModelType>GIPPS</accelerationModelType>
+            <accelerationModelType>IDM</accelerationModelType>
             <length>20.0</length>
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
@@ -26,17 +30,21 @@
         <road id="1">
             <autonomousPercentage>70.0</autonomousPercentage>
             <line id="0">
+                <carsPerHour>1400.0</carsPerHour>
+            </line>
+            <line id="1">
                 <carsPerHour>2000.0</carsPerHour>
-                <stopLight>
-                    <greenLightTimeSec>10</greenLightTimeSec>
-                    <position>1600</position>
-                    <redLightTimeSec>20</redLightTimeSec>
-                </stopLight>
+            </line>
+            <line id="2">
+                <carsPerHour>2000.0</carsPerHour>
+                <obstacle>
+                    <position>1260</position>
+                </obstacle>
             </line>
         </road>
         <typicalVehicle>
             <acceleration>2.2</acceleration>
-            <accelerationModelType>GIPPS</accelerationModelType>
+            <accelerationModelType>IDM</accelerationModelType>
             <length>20.0</length>
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
@@ -48,17 +56,21 @@
         <road id="2">
             <autonomousPercentage>30.0</autonomousPercentage>
             <line id="0">
+                <carsPerHour>1400.0</carsPerHour>
+            </line>
+            <line id="1">
                 <carsPerHour>2000.0</carsPerHour>
-                <stopLight>
-                    <greenLightTimeSec>10</greenLightTimeSec>
-                    <position>1600</position>
-                    <redLightTimeSec>20</redLightTimeSec>
-                </stopLight>
+            </line>
+            <line id="2">
+                <carsPerHour>2000.0</carsPerHour>
+                <obstacle>
+                    <position>1260</position>
+                </obstacle>
             </line>
         </road>
         <typicalVehicle>
             <acceleration>2.2</acceleration>
-            <accelerationModelType>GIPPS</accelerationModelType>
+            <accelerationModelType>IDM</accelerationModelType>
             <length>20.0</length>
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
@@ -70,17 +82,21 @@
         <road id="3">
             <autonomousPercentage>0.0</autonomousPercentage>
             <line id="0">
+                <carsPerHour>1400.0</carsPerHour>
+            </line>
+            <line id="1">
                 <carsPerHour>2000.0</carsPerHour>
-                <stopLight>
-                    <greenLightTimeSec>10</greenLightTimeSec>
-                    <position>1600</position>
-                    <redLightTimeSec>20</redLightTimeSec>
-                </stopLight>
+            </line>
+            <line id="2">
+                <carsPerHour>2000.0</carsPerHour>
+                <obstacle>
+                    <position>1260</position>
+                </obstacle>
             </line>
         </road>
         <typicalVehicle>
             <acceleration>2.2</acceleration>
-            <accelerationModelType>GIPPS</accelerationModelType>
+            <accelerationModelType>IDM</accelerationModelType>
             <length>20.0</length>
             <maxAcceleration>2.2</maxAcceleration>
             <maxSpeed>40.0</maxSpeed>
@@ -88,5 +104,5 @@
             <speed>40.0</speed>
         </typicalVehicle>
     </scenario>
-    <simulationDuration>500.0</simulationDuration>
+    <simulationDuration>1000.0</simulationDuration>
 </scenarios>

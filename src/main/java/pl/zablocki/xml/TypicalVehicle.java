@@ -24,5 +24,5 @@ class TypicalVehicle {
     private double length = 20;
     @Getter
     @Setter
-    private AccelerationModelType accelerationModelType = AccelerationModelType.GIPPS;
+    private AccelerationModelType accelerationModelType = AccelerationModelType.IDM;
 }
